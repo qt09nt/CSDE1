@@ -240,4 +240,6 @@ ggplot(csde_input_filtered_log2, aes(x=input_values.average_input, y=csde_values
   geom_point()
 
 
-
+########## look into software to remove rRNA genes  
+#https://github.com/hzi-bifo/RiboDetector
+# https://www.biostars.org/p/159959/
