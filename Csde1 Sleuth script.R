@@ -150,29 +150,45 @@ so_matrix <- as.data.frame(so_matrix)
 
 write.csv(so_matrix, "CSDE1_norm_counts_scaled_reads_per_base.csv")
 
+so_matrix <- read.csv("CSDE1_norm_counts_scaled_reads_per_base.csv")
+so_matrix <- as.data.frame(so_matrix)
+row.names(so_matrix) <- so_matrix[,1]
+
 ##########for Input vs RIP (CSDE1)
 
 #subset for CSDE1 and Input columns
 library(dplyr)
 csde_values  <- so_matrix[, c("Csde1",  "Csde2",  "Csde3")]
 input_values <- so_matrix [,c("Input1", "Input2", "Input3")]
+IGG_values <- so_matrix[,c("IgG1", "IgG2", "IgG3")]
 
 #find the average value of the scaled_reads_per_base for the 3 replicates of CSDE1 samples for each of the genes
 csde_values$average_csde <- rowMeans(csde_values)
 input_values$average_input <- rowMeans(input_values)
+IGG_values$average_IGG <- rowMeans(IGG_values)
 
 #merge the average scaled reads per base values for csde samples and input samples into a single df
 merged_csde_input <- data.frame(csde_values$average_csde, input_values$average_input)
 
+#merge the average scaled reads per base values for CSDE samples and IGG samples into a single df
+merged_csde_IGG <- data.frame(csde_values$average_csde, IGG_values$average_IGG)
+
 row.names(merged_csde_input) <-row.names(csde_values)
+row.names(merged_csde_IGG)<- row.names(csde_values)
+
 
 #create a scatter plot for Input average scaled_reads_per_base versus CSDE1 scaled_reads_per_base 
 library(ggplot2)
 
 View(merged_csde_input)
 write.csv(merged_csde_input, "merged_csde_input_average_scaled_reads_per_base.csv")
+write.csv(merged_csde_IGG, "merged_csde_IGG_average_scaled_reads_per_base.csv")
 
 ggplot(merged_csde_input, aes(x=input_values.average_input, y=csde_values.average_csde)) + 
+  geom_point()
+
+
+ggplot(merged_csde_IGG, aes(x=IGG_values.average_input, y=csde_values.average_csde)) + 
   geom_point()
 
 dev.off()
@@ -184,6 +200,11 @@ input_sorted<- input_values[order(input_values$average_input, decreasing=TRUE),]
 input_outliers<- row.names(head(input_sorted)) 
 #"Rn7s1"  "Rn7s2"  "RN7SK"  "Rpph1"  "Rn45s"  "MALAT1"
 input_values_filtered <- input_values[!(row.names(input_values) %in% input_outliers),] 
+
+#see the what the top expressed genes are in the IGG samples 
+IGG_sorted <- IGG_values[order(IGG_values$average_IGG, decreasing = TRUE),]
+IGG_outliers<- row.names(head(IGG_sorted))
+#"Rn45s"  "Rn7s1"  "Rn7s2"  "Rn28s1" "RN7SK"  "SAMD5"
 
 
 csde_sorted <- csde_values[order(csde_values$average_csde, decreasing=TRUE),]
@@ -198,8 +219,19 @@ merged_csde_input <- data.frame(csde_values$average_csde, input_values$average_i
 row.names(merged_csde_input) <-row.names(csde_values)
 csde_input_filtered <- merged_csde_input[!(row.names(merged_csde_input) %in% outliers),]
 
+#remove the outliers noncoding RNA from the merged df of the average scaled reads per base values for CSDE and IGG samples 
+merged_csde_IGG_filtered <- merged_csde_IGG[!(row.names(merged_csde_IGG) %in% IGG_outliers), ]
+
+#log2 transform the scaled_reads_per_base 
+csde_IGG_filtered_log2 <- log2(merged_csde_IGG_filtered+0.5)
+
+ggplot(csde_IGG_filtered_log2, aes(x=IGG_values.average_IGG, y=csde_values.average_csde)) + 
+  geom_point()
+
+
 ggplot(csde_input_filtered, aes(x=input_values.average_input, y=csde_values.average_csde)) + 
   geom_point()
+
 
 #try log 2 transforming the scaled_reads_per_base_values and replot scatterplot
 csde_input_filtered_log2 <-log2(csde_input_filtered+0.5)
