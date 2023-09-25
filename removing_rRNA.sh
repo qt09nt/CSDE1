@@ -45,3 +45,30 @@ ribodetector -t 20 \
   -e norrna \ 
   --chunk_size 256 \
   -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WI-mono-1.norrna.fastq
+
+### Running the GPU version of the command gives this error:
+#RuntimeError: indices should be either on cpu or on the same device as the indexed tensor (cpu)
+
+
+#find what version of cuda
+conda list
+#nvidia-cuda-runtime-cu11  11.7.99 
+
+#check pytorch version installed
+python -c "import torch; print(torch.__version__)"
+#2.0.1+cu117
+
+python -c 'import torch;print(torch.__version__);print(torch.version.cuda)'
+#2.0.1+cu117
+#11.7
+
+#install mmcv 
+pip install mmcv==2.0.0 -f https://download.openmmlab.com/mmcv/dist/cu117/torch2.0/index.html
+
+#### re-running ribodetector GPU version after installing mmcv still gives this error: 
+#RuntimeError: indices should be either on cpu or on the same device as the indexed tensor (cpu)
+
+
+#check here for solutions:
+https://github.com/open-mmlab/mmrotate/issues/511
+https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/3958
