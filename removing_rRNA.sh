@@ -5,6 +5,10 @@ https://github.com/hzi-bifo/RiboDetector
 #login to ARC
 cd /work/yang_lab/1_Software
 
+#load conda modules
+module load bioconda/conda3
+module load biobuilds/2017.11
+
 #activate conda environment
 conda activate ribodetector
 
