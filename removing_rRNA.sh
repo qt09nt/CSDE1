@@ -18,7 +18,7 @@ ribodetector_cpu -t 20 \
 -l 181 \
 -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fastq_files/Celf2-WT-mono-1_S2_R1_001.fastq \
 -e norrna \ 
--o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WI-mono-1.norrna.fastq
+-o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WT-mono-1.norrna.fastq
 
 ###error: 
 #ValueError: This ORT build has ['AzureExecutionProvider', 'CPUExecutionProvider'] enabled. Since ORT 1.9, you are required to explicitly set the 
@@ -48,7 +48,7 @@ ribodetector -t 20 \
   -m 10 \
   -e norrna \ 
   --chunk_size 256 \
-  -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WI-mono-1.norrna.fastq
+  -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WT-mono-1.norrna.fastq
 
 ### Running the GPU version of the command gives this error:
 #RuntimeError: indices should be either on cpu or on the same device as the indexed tensor (cpu)
