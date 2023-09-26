@@ -36,7 +36,7 @@ pip3 install torch torchvision torchaudio
 
 salloc --mem=10G --time 01:00:00 --partition=bigmem
 
-##############try GPU version of Ribodetector
+############## try GPU version of Ribodetector
 
 #Request GPU core resource
 #https://rcs.ucalgary.ca/How_to_request_an_interactive_GPU_on_ARC
@@ -107,4 +107,8 @@ conda install pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit
 #ERROR:Solving environment: failed
 # CondaValueError: Malformed version string '~': invalid character(s).
 
+###try installing Pytorch v.2
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
+#try running Ribodetector GPU version command again
+ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fastq_files/Celf2-WT-mono-1_S2_R1_001.fastq   -m 10   -e norrna --chunk_size 256  -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WT-mono-1.norrna.fastq
