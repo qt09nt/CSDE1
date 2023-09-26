@@ -122,3 +122,5 @@ ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fa
 #    return pack.data[indices]
 #RuntimeError: indices should be either on cpu or on the same device as the indexed tensor (cpu)
 
+#https://github.com/hzi-bifo/RiboDetector/issues/40
+
