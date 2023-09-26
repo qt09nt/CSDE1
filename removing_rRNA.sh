@@ -112,3 +112,13 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 #try running Ribodetector GPU version command again
 ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fastq_files/Celf2-WT-mono-1_S2_R1_001.fastq   -m 10   -e norrna --chunk_size 256  -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WT-mono-1.norrna.fastq
+
+#Traceback of TorchScript (most recent call last):
+#  File "/home/queenie.tsang/.conda/envs/ribodetector/lib/python3.8/site-packages/ribodetector/model/model.py", l                                                      ine 118, in last_items
+#    indices = sorted_last_indices(pack=pack)
+#    if unsort and pack.unsorted_indices is not None:
+#        indices = indices[pack.unsorted_indices]
+#                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ <--- HERE
+#    return pack.data[indices]
+#RuntimeError: indices should be either on cpu or on the same device as the indexed tensor (cpu)
+
