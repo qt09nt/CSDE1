@@ -115,6 +115,6 @@ def first_items(pack: PackedSequence, unsort: bool) -> Tensor:
 def last_items(pack: PackedSequence, unsort: bool) -> Tensor:
     indices = sorted_last_indices(pack=pack)
     if unsort and pack.unsorted_indices is not None:
-       # indices = indices[pack.unsorted_indices]
-         indices = indices.to(n_id.device)[pack.unsorted_indices].to(self.device)
+        indices = indices[pack.unsorted_indices]
+        
     return pack.data[indices]
