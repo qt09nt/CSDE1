@@ -76,3 +76,35 @@ pip install mmcv==2.0.0 -f https://download.openmmlab.com/mmcv/dist/cu117/torch2
 #check here for solutions:
 https://github.com/open-mmlab/mmrotate/issues/511
 https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/3958
+
+#uninstall pytorch with 
+conda uninstall pytorch
+pip uninstall torch
+pip uninstall torch
+
+#try installing the same version of pytorch as what the Ribodetector software was tested on ie. from Ribodetector
+#github it says "Our code was tested with pytorch v1.7, v1.7.1, v1.10.2."
+
+#You should find the CUDA Version *highest CUDA version the installed driver supports on the top right corner of the comand's output. 
+nvidia-smi
+
+#output says CUDA Version: 11.4
+
+#for installing other previous versions of Pytorch
+#https://pytorch.org/get-started/previous-versions/
+#v1.7.1
+# CUDA 11.0
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
+#error
+
+#v1.7.0
+# CUDA 11.0
+conda install pytorch==1.7.0 torchvision==0.8.0 torchaudio==0.7.0 cudatoolkit=11.0 -c pytorch
+##error
+
+#try installing pytorch 1.10.1
+conda install pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit=11.3 -c pytorch -c conda-forge
+#ERROR:Solving environment: failed
+# CondaValueError: Malformed version string '~': invalid character(s).
+
+
