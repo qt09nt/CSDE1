@@ -178,4 +178,11 @@ cd glibc-build/
 make
 #started this "make" step Sept 27 at around 11AM, still runnning.......
 
+ ########## Try running alignment with the older version of STAR_2.5.2b which is available from the module biobuilds/2017.11
+
+#generate the genome index https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
+
+STAR --runMode genomeGenerate --genomeDir 
+
  
+
