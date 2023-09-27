@@ -3,8 +3,12 @@
 
 #!/bin/bash
 #<------------------------Request for Resources----------------------->
-
-
+#SBATCH --partition=bigmem
+#SBATCH --time=6:0:0
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH -cpus-per-task=8
+#SBATCH --mem=8gb
 
 module load biobuilds/2017.11
 
