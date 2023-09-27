@@ -181,7 +181,7 @@ make
 #install using make install
 make install
 
-
+#https://github.com/alexdobin/STAR/issues/1484
 
 
 ########## Try running alignment with the older version of STAR_2.5.2b which is available from the module biobuilds/2017.11
@@ -189,6 +189,5 @@ make install
 #generate the genome index https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 
 STAR --runMode genomeGenerate --genomeDir 
-
  
 
