@@ -1,6 +1,9 @@
 #alignment of mouse genome reference file and gtf annotation file where rRNA and noncoding RNA removed
 #submit as a batch job 
 
+#!/bin/bash
+#<------------------------Request for Resources----------------------->
+
 
 
 module load biobuilds/2017.11
