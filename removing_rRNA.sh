@@ -176,9 +176,15 @@ cd glibc-build/
 
 # compile the code using make command as shown below
 make
-#started this "make" step Sept 27 at around 11AM, still runnning.......
+# this "make" step takes several hours (around 4 hours)
 
- ########## Try running alignment with the older version of STAR_2.5.2b which is available from the module biobuilds/2017.11
+#install using make install
+make install
+
+
+
+
+########## Try running alignment with the older version of STAR_2.5.2b which is available from the module biobuilds/2017.11
 
 #generate the genome index https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 
