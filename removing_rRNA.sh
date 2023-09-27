@@ -183,11 +183,13 @@ make install
 
 #https://github.com/alexdobin/STAR/issues/1484
 
+##### glibc-2.29 is now installed but not sure how to link to this version instead of the default old version
 
 ########## Try running alignment with the older version of STAR_2.5.2b which is available from the module biobuilds/2017.11
 
 #generate the genome index https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 
-STAR --runMode genomeGenerate --genomeDir 
+#submit STAR build reference index as a batch job
+
  
 
