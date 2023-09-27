@@ -133,4 +133,46 @@ ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fa
 nvcc --version
 ##### try STAR
 
-https://github.com/alexdobin/STAR
+#https://github.com/alexdobin/STAR
+# Get latest STAR source from releases
+wget https://github.com/alexdobin/STAR/archive/2.7.11a.tar.gz
+tar -xzf 2.7.11a.tar.gz
+cd STAR-2.7.11a
+
+export PATH=$PATH:/work/yang_lab/1_Software/STAR-2.7.11a/bin/Linux_x86_64/STAR:$PATH
+
+#run STAR
+./STAR
+
+#error:
+#./STAR: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by ./STAR)
+#./STAR: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.26' not found (required by ./STAR)
+
+#check version of GLIBC 
+ldd --version
+
+#ldd (GNU libc) 2.28
+#Copyright (C) 2018 Free Software Foundation, Inc.
+#This is free software; see the source for copying conditions.  There is NO
+#warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#Written by Roland McGrath and Ulrich Drepper.
+
+#https://www.cyberithub.com/solved-glibc-2-29-not-found-error-on-ubuntu-linux/
+#get glibc version 2.29
+wget -c https://ftp.gnu.org/gnu/glibc/glibc-2.29.tar.gz
+
+#extract glibc 
+tar -zxvf glibc-2.29.tar.gz
+
+cd glibc-2.29
+mkdir glibc-build
+cd glibc-build/
+
+#configure the code for your local architecture by running below configure script.
+../configure --prefix=/home/queenie.tsang/work/yang_lab/1_Software/STAR-2.7.11a/bin/Linux_x86_64/glibc-2.29/glibc-build
+
+# compile the code using make command as shown below
+make
+#started this "make" step Sept 27 at around 11AM, still runnning.......
+
+ 
