@@ -129,6 +129,9 @@ ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fa
 #https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Rocky&target_version=8&target_type=runfile_local
 #Linux x86_64 Rocky 8
 
+#check linux distribution version
+cat /etc/os-release
+
 #check the version of CUDA with 
 nvcc --version
 ##### try STAR
