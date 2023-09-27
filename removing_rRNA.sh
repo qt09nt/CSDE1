@@ -125,10 +125,12 @@ ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fa
 #https://github.com/hzi-bifo/RiboDetector/issues/40
 #https://github.com/hzi-bifo/RiboDetector/issues/34
 
+#try installing CUDA if needed  - HPC support contacted for help
 #https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Rocky&target_version=8&target_type=runfile_local
 #Linux x86_64 Rocky 8
 
-#try installing CUDA if needed  - HPC support contacted for help
-
+#check the version of CUDA with 
+nvcc --version
 ##### try STAR
 
+https://github.com/alexdobin/STAR
