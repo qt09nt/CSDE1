@@ -222,3 +222,6 @@ gzip -d SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz
 
 #Filtering rRNA from RNAseq data
 #https://www.biostars.org/p/321714/#321727
+
+
+#### Try out SortmeRNA tool to remove rRNA
