@@ -219,3 +219,6 @@ gzip -d SILVA_138.1_LSURef_NR99_tax_silva.fasta.gz
 #download the SILVA aligned small (16S/18S, SSU) ribosomal subunit fasta file
 wget https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz
 gzip -d SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz
+
+#Filtering rRNA from RNAseq data
+#https://www.biostars.org/p/321714/#321727
