@@ -190,10 +190,12 @@ make install
 #generate the genome index https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 
 #submit STAR build reference index as a batch job
+cd /work/yang_lab/queenie
+sbatch star.slurm
+
 
 #when I run STAR with the transcriptome mouse.all.cds.fa file with the gtf file where ncRNA and rRNA genes have been removed with grep it gives this error:
-#
-#Fatal INPUT FILE error, no valid exon lines in the GTF file: mm10.filtered.out.rRNA.ncRNA.gtf
+##Fatal INPUT FILE error, no valid exon lines in the GTF file: mm10.filtered.out.rRNA.ncRNA.gtf
 #Solution: check the formatting of the GTF file. Most likely cause is the difference in chromosome naming between GTF and FASTA file.
 
 #apparently this error is because of : https://github.com/alexdobin/STAR/issues/421
@@ -201,4 +203,7 @@ make install
 # do you want to map to the transcriptome (transcript sequences) or to the genome (chromosome sequences)? If the former, you do not need annotations GTF at all. If the latter, you would need to use genome FASTA (ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_28/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz) and genome GTF which you already have.
 # Also, I would recommend using one of the latest versions of the GENCODE."
 
+#so trying another way to remove rRNA where you construct a bowtie index using the rRNA database fasta file, then align to it, and exclude mapped reads (exclude reads
+#that map to rRNA genes
+#: https://www.biostars.org/p/377260/
 
