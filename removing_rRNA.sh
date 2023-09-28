@@ -207,3 +207,14 @@ sbatch star.slurm
 #that map to rRNA genes
 #: https://www.biostars.org/p/377260/
 
+#download the rRNA database file from SILVA https://www.arb-silva.de/download/arb-files/
+#SILVA Release 138.1: Download the latest SILVA databases for ARB for small (16S/18S) and for large (23S/28S) subunit ribosomal RNAs.
+#Released: 27.08.2020
+#https://www.arb-silva.de/download/arb-files/
+#	SILVA_138.1_LSURef_NR99_tax_silva.fasta.gz	65 M
+# download the large (23S/28S)ribosomal subunit database fasta file
+wget 	https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_LSURef_NR99_tax_silva.fasta.gz
+gzip -d SILVA_138.1_LSURef_NR99_tax_silva.fasta.gz
+
+#download the SILVA aligned small (16S/18S, SSU) ribosomal subunit fasta file
+wget https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz
