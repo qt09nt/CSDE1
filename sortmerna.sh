@@ -18,7 +18,7 @@ input=/work/yang_lab/csde1_RIP/*
 i=0
 
 for FILE in $input*fastq
-do echo "trials starting for"
+do echo "sortmerna starting for"
 echo $i
 echo "Accessing this file"
 echo $FILE
@@ -27,6 +27,10 @@ echo $FILE
 rm -rf $HOME/sortmerna/run/kvdb/
 
 ##### run sortmerna 
-sortmerna --ref $REF_SSU \
---ref $REF_LSU \
---reads /work/yang_lab/queenie/csde1_RIP/Li35179_S1_R1_001.fastq 
+sortmerna --ref $REF_SSU --ref $REF_LSU --reads /work/yang_lab/queenie/csde1_RIP/$FILE
+
+echo "trial" $i "complete"
+((i++))
+echo "-------------"
+done
+
