@@ -9,10 +9,11 @@
 #SBATCH --mem=0
 
 module load biobuilds/2017.11
+conda activate sortmerna_env
 
 REF_SSU=/work/yang_lab/queenie/SILVA_138.1_SSURef_NR99_tax_silva.fasta
 REF_LSU=/work/yang_lab/queenie/SILVA_138.1_LSURef_NR99_tax_silva.fasta
-input=/work/yang_lab/csde1_RIP/*
+input=/work/yang_lab/queenie/csde1_RIP/*
 
 # Run
 i=0
@@ -27,7 +28,7 @@ echo $FILE
 rm -rf $HOME/sortmerna/run/kvdb/
 
 ##### run sortmerna 
-sortmerna --ref $REF_SSU --ref $REF_LSU --reads /work/yang_lab/queenie/csde1_RIP/$FILE
+sortmerna --ref $REF_SSU --ref $REF_LSU --reads $FILE
 
 echo "trial" $i "complete"
 ((i++))
