@@ -2,10 +2,10 @@
 #<------------------------Request for Resources----------------------->
 #SBATCH -J sortmerna
 #SBATCH --partition=bigmem,cpu2017-bf05
-#SBATCH --time=6:0:0
+#SBATCH --time=12:0:0
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=80
 #SBATCH --mem=0
 
 module load biobuilds/2017.11
