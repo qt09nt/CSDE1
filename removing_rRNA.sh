@@ -233,3 +233,16 @@ gzip -d SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz
 
 #activate sortmerna environment
 conda activate sortmerna_env
+
+#### 
+conda install sortmerna
+which sortmerna
+#~/.conda/envs/sortmerna_env/bin/sortmerna
+
+# test the installation
+sortmerna --version
+#SortMeRNA version 4.3.6
+
+# view help
+sortmerna -h
+
