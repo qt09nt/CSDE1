@@ -246,6 +246,8 @@ sortmerna --version
 # view help
 sortmerna -h
 
+cd /work/yang_lab/queenie/csde1_RIP/
+
 ##### run sortmerna on interactive compute node
 sortmerna --ref /work/yang_lab/queenie/SILVA_138.1_LSURef_NR99_tax_silva.fasta \
 --ref /work/yang_lab/queenie/SILVA_138.1_SSURef_NR99_tax_silva.fasta \
