@@ -226,3 +226,10 @@ gzip -d SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz
 #https://www.biostars.org/p/207311/
 #### Try out SortmeRNA tool to remove rRNA
 #https://github.com/sortmerna/sortmerna
+
+
+### create new conda environment for sortmerna
+#environment location: /home/queenie.tsang/.conda/envs/sortmerna_env
+
+#activate sortmerna environment
+conda activate sortmerna_env
