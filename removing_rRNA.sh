@@ -246,3 +246,5 @@ sortmerna --version
 # view help
 sortmerna -h
 
+##### run sortmerna
+sortmerna --ref /work/yang_lab/queenie/SILVA_138.1_LSURef_NR99_tax_silva.fasta --ref /work/yang_lab/queenie/SILVA_138.1_SSURef_NR99_tax_silva.fasta --reads 
