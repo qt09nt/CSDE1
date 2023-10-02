@@ -279,3 +279,10 @@ rm -rf $HOME/sortmerna/run/kvdb/
 # the parameter –num-alignment INT = - Very fast for INT=1
 #--fastx ->   Optional  Output aligned reads into FASTA/FASTQ file
 sortmerna --ref /work/yang_lab/queenie/rRNA_databases_v4.3.6/smr_v4.3_default_db.fasta --reads /work/yang_lab/queenie/csde1_RIP/Li35179_S1_R1_001.fastq --fastx --aligned --other -num_alignments 1
+
+#### it finished running but there is no output generated in /home/queenie.tsang/sortmerna/run/out; also there is an error: 
+#[is_split_ready:726] found existing readfeed descriptor /home/queenie.tsang/sortmerna/run/readb/readfeed
+#terminate called after throwing an instance of 'std::out_of_range'
+#  what():  stoi
+#Aborted (core dumped)
+
