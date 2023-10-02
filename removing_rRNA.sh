@@ -260,6 +260,11 @@ sortmerna --ref /work/yang_lab/queenie/SILVA_138.1_LSURef_NR99_tax_silva.fasta \
 ################### Oct 2 2023 the bash script for sortmerna submitted Sept 29 ran  into an error 
 #try running interactively
 
+salloc --mem=10G --time 06:00:00 --partition=single
+
+module load bioconda/conda3
+conda activate sortmerna_env
+
 #use sortmerna Reference database 
 #https://sortmerna.readthedocs.io/en/latest/databases.html
 wget https://github.com/biocore/sortmerna/releases/download/v4.3.4/database.tar.gz
@@ -271,6 +276,8 @@ rm -rf $HOME/sortmerna/run/kvdb/
 
 # run sortmerna interactively with one of the reference databases from their github site
 # the parameter –num-alignment INT = - Very fast for INT=1
+#--fastx ->   Optional  Output aligned reads into FASTA/FASTQ file
 sortmerna --ref /work/yang_lab/queenie/rRNA_databases_v4.3.6/smr_v4.3_default_db.fasta
 --reads /work/yang_lab/queenie/csde1_RIP/Li35179_S1_R1_001.fastq
---fastx -num_alignments 1
+--fastx
+-num_alignments 1
