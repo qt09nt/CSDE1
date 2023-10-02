@@ -286,3 +286,5 @@ sortmerna --ref /work/yang_lab/queenie/rRNA_databases_v4.3.6/smr_v4.3_default_db
 #  what():  stoi
 #Aborted (core dumped)
 
+#commented this issue in the sortmerna github here:
+#https://github.com/sortmerna/sortmerna/issues/379
