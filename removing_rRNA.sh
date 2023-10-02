@@ -260,9 +260,8 @@ sortmerna --ref /work/yang_lab/queenie/SILVA_138.1_LSURef_NR99_tax_silva.fasta \
 ################### Oct 2 2023 the bash script for sortmerna submitted Sept 29 ran  into an error 
 #try running interactively
 
-salloc --mem=10G --time 06:00:00 --partition=single
-
-salloc --partition=bigmem --time=2:0:0 --nodes=1 --ntasks=1 --cpus-per-task=40 --mem=0
+#takes a reallly long time to run; allocate more compute resources to task
+salloc --partition=bigmem --time=16:0:0 --nodes=1 --ntasks=1 --cpus-per-task=40 --mem=0
 
 module load bioconda/conda3
 conda activate sortmerna_env
