@@ -5,6 +5,9 @@ https://github.com/hzi-bifo/RiboDetector
 #login to ARC
 cd /work/yang_lab/1_Software
 
+#get a CPU node resource
+#salloc --mem=10G --time 05:00:00 --partition=single
+
 #load conda modules
 module load bioconda/conda3
 module load biobuilds/2017.11
@@ -252,5 +255,12 @@ cd /work/yang_lab/queenie/csde1_RIP/
 sortmerna --ref /work/yang_lab/queenie/SILVA_138.1_LSURef_NR99_tax_silva.fasta \
 --ref /work/yang_lab/queenie/SILVA_138.1_SSURef_NR99_tax_silva.fasta \
 --reads /work/yang_lab/queenie/csde1_RIP/Li35179_S1_R1_001.fastq 
+
+
+### Oct 2 2023 the bash script for sortmerna submitted Sept 29 ran  into an error 
+#try running interactively
+
+#use sortmerna Reference database 
+#https://sortmerna.readthedocs.io/en/latest/databases.html
 
 
