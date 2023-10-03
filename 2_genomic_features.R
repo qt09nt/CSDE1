@@ -156,3 +156,88 @@ length(GR)
 # In addition, the transcripts function can also be used to retrieve a subset of the transcripts available such as those on the
 #\(+\)-strand of chromosome 1.
 
+GR <- transcripts(txdb, filter=list(tx_chrom = "chr15", tx_strand = "+"))
+length(GR)
+GR
+# GRanges object with 1732 ranges and 2 metadata columns:
+#   seqnames              ranges strand |     tx_id     tx_name
+# <Rle>           <IRanges>  <Rle> | <integer> <character>
+#   [1]    chr15   20362688-20364420      + |     53552  uc001yte.1
+# [2]    chr15   20487997-20496811      + |     53553  uc001ytf.1
+# [3]    chr15   20723929-20727150      + |     53554  uc001ytj.3
+# [4]    chr15   20739312-20739342      + |     53555  uc021sex.1
+# [5]    chr15   20742235-20742263      + |     53556  uc010tzb.1
+# ...      ...                 ...    ... .       ...         ...
+# [1728]    chr15 102506273-102507991      + |     55279  uc002cdj.3
+# [1729]    chr15 102511401-102513250      + |     55280  uc031qum.1
+# [1730]    chr15 102513423-102516808      + |     55281  uc002cdq.3
+# [1731]    chr15 102513423-102516808      + |     55282  uc010bpo.3
+# [1732]    chr15 102514398-102516808      + |     55283  uc002cdr.3
+# -------
+#   seqinfo: 1 sequence from hg19 genom
+
+unique(strand(GR))
+# [1] +
+#   Levels: + - *
+
+# The promoters function computes a GRanges object that spans 
+# the promoter region around the transcription start site for 
+# the transcripts in a TxDb object. The upstream and downstream
+# arguments define the number of bases upstream and downstream 
+# from the transcription start site that make up the promoter 
+# region.
+
+PR <- promoters(txdb, upstream = 2000, downstream = 400)
+PR
+
+# GRanges object with 3337 ranges and 2 metadata columns:
+#   seqnames              ranges strand |     tx_id
+# <Rle>           <IRanges>  <Rle> | <integer>
+#   uc001yte.1    chr15   20360688-20363087      + |     53552
+# uc001ytf.1    chr15   20485997-20488396      + |     53553
+# uc001ytj.3    chr15   20721929-20724328      + |     53554
+# uc021sex.1    chr15   20737312-20739711      + |     53555
+# uc010tzb.1    chr15   20740235-20742634      + |     53556
+# ...      ...                 ...    ... .       ...
+# uc021syy.1    chr15 102302656-102305055      - |     56884
+# uc002cdf.1    chr15 102462863-102465262      - |     56885
+# uc002cds.2    chr15 102518897-102521296      - |     56886
+# uc010utv.1    chr15 102518897-102521296      - |     56887
+# uc010utw.1    chr15 102518897-102521296      - |     56888
+# tx_name
+# <character>
+#   uc001yte.1  uc001yte.1
+# uc001ytf.1  uc001ytf.1
+# uc001ytj.3  uc001ytj.3
+# uc021sex.1  uc021sex.1
+# uc010tzb.1  uc010tzb.1
+# ...         ...
+# uc021syy.1  uc021syy.1
+# uc002cdf.1  uc002cdf.1
+# uc002cds.2  uc002cds.2
+# uc010utv.1  uc010utv.1
+# uc010utw.1  uc010utw.1
+# -------
+#   seqinfo: 1 sequence from hg19 genome
+
+# The exons and cds functions can also be used in a similar fashion to retrive genomic coordinates for exons and coding sequences.
+# 
+# \begin{Exercise} Use exonsto retrieve all the exons from chromosome 15. How does the length of this compare to the value returned bytranscripts? \end{Exercise} `;N\begin{Solution}
+
+EX <- exons(txdb)
+EX[1:4]
+# GRanges object with 4 ranges and 1 metadata column:
+#   seqnames            ranges strand |   exon_id
+# <Rle>         <IRanges>  <Rle> | <integer>
+#   [1]    chr15 20362688-20362858      + |    192986
+# [2]    chr15 20362943-20363123      + |    192987
+# [3]    chr15 20364397-20364420      + |    192988
+# [4]    chr15 20487997-20488227      + |    192989
+# -------
+#   seqinfo: 1 sequence from hg19 genome
+
+length(EX)
+#10771
+
+length(GR)
+#1732
