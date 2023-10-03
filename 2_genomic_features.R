@@ -52,4 +52,15 @@ head(seqlevels(txdb))
   
 seqlevels(txdb) <- "chr1"
 
+#from this point on in your R session only chromosome 1 would be
+#consulted when you call the various retrieval methods… If you need 
+#to reset back to the original seqlevels (i.e. to the seqlevels stored 
+#in the db), then set the seqlevels to seqlevels0(txdb)
+
+seqlevels(txdb) <- seqlevels0(txdb)
+
+#use seqlevels to set only chromosome 15 to be active 
+
+seqlevels(txdb) <- "chr15"
+seqlevels(txdb)
 
