@@ -137,7 +137,15 @@ cat /etc/os-release
 
 #check the version of CUDA with 
 nvcc --version
-##### try STAR
+
+########### try using docker image version of ribodetector  Oct 4 2023
+apptainer build output_image.sif docker://broadinstitute/gatk
+
+#Converting the image to the Apptainer format
+#Use apptainer build to pull and convert the Docker image
+apptainer build ribodetector_image.sif docker://dawnmy/ribodetector:0.2.7
+
+################# try STAR
 
 #https://github.com/alexdobin/STAR
 # Get latest STAR source from releases
