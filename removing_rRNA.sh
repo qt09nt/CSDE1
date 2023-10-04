@@ -139,11 +139,27 @@ cat /etc/os-release
 nvcc --version
 
 ########### try using docker image version of ribodetector  Oct 4 2023
-apptainer build output_image.sif docker://broadinstitute/gatk
+#https://rcs.ucalgary.ca/How_to_convert_a_Docker_container_to_an_Apptainer_container
 
 #Converting the image to the Apptainer format
 #Use apptainer build to pull and convert the Docker image
 apptainer build ribodetector_image.sif docker://dawnmy/ribodetector:0.2.7
+
+#### Run and test the container
+apptainer run ribodetector_image.sif ribodetector -t 20 -l 181 -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fastq_files/Celf2-WT-mono-1_S2_R1_001.fastq -m 10 -e norrna --chunk_size 256 -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WT-mono-1.norrna.fastq
+
+##### Error: 
+2023-10-04 15:16:53 : INFO  Using high RECALL model file: /usr/local/lib/python3.8/site-packages/ribodetector/data/ribodetector_600k_variable_len70_101_epoch47.pth
+2023-10-04 15:16:53 : ERROR  No visible CUDA devices! Please use detect_cpu.py to run it on CPU if you do not have GPU or
+you need to install GPU version of PyTorch
+Traceback (most recent call last):
+  File "/usr/local/bin/ribodetector", line 8, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python3.8/site-packages/ribodetector/detect.py", line 725, in main
+    seq_pred.load_model()
+  File "/usr/local/lib/python3.8/site-packages/ribodetector/detect.py", line 100, in load_model
+    raise RuntimeError(
+RuntimeError: Set CUDA_VISIBLE_DEVICES or use CPU inference.
 
 ################# try STAR
 
