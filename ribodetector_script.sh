@@ -22,8 +22,8 @@ echo $FILE
 
 ##### Run ribodetector GPU version
 apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-          -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fastq_files/${FILE}.fastq -m 12 -e norrna \
-          --chunk_size 256 -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/${FILE}.norrna.fastq
+          -i /work/yang_lab/queenie/csde1_RIP/fastq/${FILE} -m 12 -e norrna \
+          --chunk_size 256 -o /work/yang_lab/queenie/csde1_RIP/ribodetector/${FILE}.norrna.fastq
 
 "trial" $i "complete"
 ((i++))
