@@ -45,3 +45,8 @@ mv Li35187_S9_R1_001.fastq csde3_S9.fastq
 apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
           -i /work/yang_lab/queenie/csde1_RIP/IgG1_S4.fastq -m 12 -e norrna \
           --chunk_size 256 -o /work/yang_lab/queenie/csde1_RIP/ribodetector/IgG1_S4.norrna.fastq
+
+apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
+          -i /work/yang_lab/queenie/csde1_RIP/IgG2_S5.fastq -m 12 -e norrna \
+          --chunk_size 256 -o /work/yang_lab/queenie/csde1_RIP/ribodetector/IgG2_S5.norrna.fastq
+
