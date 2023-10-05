@@ -9,7 +9,7 @@
 
 cd /work/yang_lab/1_Software/
 
-input=/work/yang_lab/queenie/csde1_RIP/*
+input=/work/yang_lab/queenie/csde1_RIP/fastq/*
 
 # Run
 i=0
