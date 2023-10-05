@@ -22,7 +22,6 @@ mv ribodetector_image.sif /work/yang_lab/1_Software/
 [<user>@fg1 ~]$ cd /work/yang_lab/1_Software/
 
 #Run the application within the container using the apptainer command. Make sure to bind the ‘yang_lab’ directory to the container:
-
 [<user>@fg1 1_Software]$ apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 181 \
           -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fastq_files/Celf2-WT-mono-1_S2_R1_001.fastq -m 10 -e norrna \
           --chunk_size 256 -o /work/yang_lab/queenie/Celf2-KI-Polysome-seq/ribodetector/Celf2-WT-mono-1.norrna.fastq
@@ -42,8 +41,7 @@ mv Li35185_S7_R1_001.fastq csde1_S7.fastq
 mv Li35186_S8_R1_001.fastq csde2_S8.fastq
 mv Li35187_S9_R1_001.fastq csde3_S9.fastq
 
-
-
-
-
-# run ribodetector to remove rRNA from the CSDE1 samples 
+# run ribodetector to remove rRNA for the CSDE1 samples 
+apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
+          -i /work/yang_lab/queenie/csde1_RIP/IgG1_S4.fastq -m 12 -e norrna \
+          --chunk_size 256 -o /work/yang_lab/queenie/csde1_RIP/ribodetector/IgG1_S4.norrna.fastq
