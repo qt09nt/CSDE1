@@ -50,3 +50,5 @@ apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -
           -i /work/yang_lab/queenie/csde1_RIP/IgG2_S5.fastq -m 12 -e norrna \
           --chunk_size 256 -o /work/yang_lab/queenie/csde1_RIP/ribodetector/IgG2_S5.norrna.fastq
 
+#### write the Ribodetector command as a batch script 
+
