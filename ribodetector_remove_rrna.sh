@@ -65,7 +65,7 @@ sbatch ribodetector_script.slurm
 #navigate to C:\Users\queenie.tsang\Desktop\CSDE1\ribodetector
 rsync -axv --progress --partial -e queenie.tsang@arc-dtn.uclagary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
 
-rsync -axv --progress --partial-dir=.rsync-partial -e queenie.tsang@arc-dtn.uclagary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
+rsync -axv --progress --partial-dir=.rsync-partial -e queenie.tsang@arc-dtn.ucalgary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
 
 #Error with rsync when trying to download kallisto output
 stty: standard input: Inappropriate ioctl for device
