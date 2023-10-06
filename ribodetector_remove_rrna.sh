@@ -65,11 +65,4 @@ sbatch ribodetector_script.slurm
 #navigate to C:\Users\queenie.tsang\Desktop\CSDE1\ribodetector
 rsync -axv --progress --partial -e queenie.tsang@arc-dtn.uclagary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
 
-rsync -axv --progress --partial-dir=.rsync-partial -e queenie.tsang@arc-dtn.ucalgary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
-
-#Error with rsync when trying to download kallisto output
-stty: standard input: Inappropriate ioctl for device
-ssh: connect to host arc-dtn.uclagary.ca port 22: Connection timed out
-stty: standard input: Inappropriate ioctl for device
-rsync: connection unexpectedly closed (0 bytes received so far) [Receiver]
-rsync error: error in rsync protocol data stream (code 12) at /home/lapo/package/rsync-3.0.9-1/src/rsync-3.0.9/io.c(605) [Receiver=3.0.9]
+rsync -axv queenie.tsang@arc-dtn.ucalgary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
