@@ -2,6 +2,8 @@
 # Modified by Drayden Kopp for Dr. Guang Yang's RIP-Seq Data
 # Date of acquisition of Paul's Script: November 19, 2019
 # Modified by Reza Aghanoori June 2022
+#modified by Queenie Tsang September 2023
+
 
 #-------------------------------- Data Fetching -----------------------------------
 if (!require("BiocManager", quietly = TRUE))
@@ -18,15 +20,25 @@ library(ggplot2)
 #setwd("/Users/rezaaghanoori/Desktop/June2022, Csde1 RIP Seq data/CSDE1 Kallisto") 
 setwd("C:/Users/queenie.tsang/Desktop/June2022, Csde1 RIP Seq data/1.CSDE1 Kallisto")
 
+setwd("C:/Users/queenie.tsang/Desktop/CSDE1/ribodetector")
+
+#load in the kallisto files with fastq sample files filtered to remove rRNA  using Ribodetector
+
 sample_id <- dir(pattern = ".kallisto")
 kal_dirs <- sample_id
 kal_dirs
 
 #import data from metadata table
 s2c <- read.csv(file.path("sampleinfo.csv"), header = TRUE)
+
+#ribodetector version of metadata table
+s2c <- read.csv(file.path("sampleinfo_ribodetector.csv"), header=TRUE)
+
 #assigning covariates 
 s2c <- dplyr::select(s2c, sample = Sample, Condition = State, Csde = Csde, Capture = Capture)
-#link the metadata with kallisto paths
+
+
+#link the metadata with kallisto paths : 
 s2c <- dplyr::mutate(s2c, path = kal_dirs)
 
 #confirm the metadata file matches the correct file location
@@ -184,6 +196,8 @@ View(merged_csde_input)
 write.csv(merged_csde_input, "merged_csde_input_average_scaled_reads_per_base.csv")
 write.csv(merged_csde_IGG, "merged_csde_IGG_average_scaled_reads_per_base.csv")
 
+merged_csde_IGG <- read.csv("merged_csde_IGG_average_scaled_reads_per_base.csv")
+
 ggplot(merged_csde_input, aes(x=input_values.average_input, y=csde_values.average_csde)) + 
   geom_point()
 
@@ -222,6 +236,7 @@ csde_input_filtered <- merged_csde_input[!(row.names(merged_csde_input) %in% out
 #remove the outliers noncoding RNA from the merged df of the average scaled reads per base values for CSDE and IGG samples 
 merged_csde_IGG_filtered <- merged_csde_IGG[!(row.names(merged_csde_IGG) %in% IGG_outliers), ]
 
+
 #log2 transform the scaled_reads_per_base 
 csde_IGG_filtered_log2 <- log2(merged_csde_IGG_filtered+0.5)
 
@@ -240,6 +255,38 @@ ggplot(csde_input_filtered_log2, aes(x=input_values.average_input, y=csde_values
   geom_point()
 
 
-########## look into software to remove rRNA genes  
-#https://github.com/hzi-bifo/RiboDetector
-# https://www.biostars.org/p/159959/
+
+######### October 6 2023 PCA plot with ribodetector filtered samples
+so_matrix <- sleuth_to_matrix(obj= so, which_df = "obs_norm", which_units = "scaled_reads_per_base")
+so_matrix <- as.data.frame(so_matrix)
+
+#remove the genes which have 0 variance between the samples
+so_matrix <- so_matrix[ which(apply(so_matrix, 1, var) != 0),]
+samples_log2 <- log2(so_matrix+0.5)
+
+
+
+which(apply(samples_log2, 2, var)==0)
+
+
+str(csde1_pca)
+
+#PCA
+csde1_pca <-prcomp(t(samples_log2), center = TRUE, scale = TRUE)$x
+summary(csde1_pca)
+
+#plot PC1 by PC2 
+pc_data = data.frame(x= csde1_pca[,1], y = csde1_pca[,2], sample = as.character(s2c$Condition))
+
+ggplot (pc_data, aes(x=x, y=y, color = sample ))+
+  geom_point(size=6) +
+  scale_color_manual("Sample", values = c("blue", "darkgreen", "red") )+
+  theme_bw() +
+  xlab("PC1") +
+  ylab("PC2") + 
+  theme(text = element_text(size = 14), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank())
+
+
