@@ -50,5 +50,26 @@ apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -
           -i /work/yang_lab/queenie/csde1_RIP/IgG2_S5.fastq -m 12 -e norrna \
           --chunk_size 256 -o /work/yang_lab/queenie/csde1_RIP/ribodetector/IgG2_S5.norrna.fastq
 
-#### write the Ribodetector command as a batch script 
+#### write the Ribodetector command as a bash script 
 
+#rename the .sh script to slurm file for job submission on ARC
+mv ribodetector_script.sh ribodetector_script.slurm
+
+#submit ribodetector bash script
+sbatch ribodetector_script.slurm
+
+########### Re-run alignment with Kallisto using the script 1_kallisto_script_ribodetector.sh
+# kallisto files are found in this directory /work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto/
+
+#download kallisto files from ARC; open local mobaXterm terminal window
+#navigate to C:\Users\queenie.tsang\Desktop\CSDE1\ribodetector
+rsync -axv --progress --partial -e queenie.tsang@arc-dtn.uclagary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
+
+rsync -axv --progress --partial-dir=.rsync-partial -e queenie.tsang@arc-dtn.uclagary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
+
+#Error with rsync when trying to download kallisto output
+stty: standard input: Inappropriate ioctl for device
+ssh: connect to host arc-dtn.uclagary.ca port 22: Connection timed out
+stty: standard input: Inappropriate ioctl for device
+rsync: connection unexpectedly closed (0 bytes received so far) [Receiver]
+rsync error: error in rsync protocol data stream (code 12) at /home/lapo/package/rsync-3.0.9-1/src/rsync-3.0.9/io.c(605) [Receiver=3.0.9]
