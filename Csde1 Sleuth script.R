@@ -84,6 +84,11 @@ so <- sleuth_fit(so)
 #Plot PCA 
 sleuth_live(so)
 
+#look at the genes contributing the most to the variances in PC1 and PC2
+plot_loadings(so, pc_input=1)
+plot_loadings(so, pc_input=2)
+
+
 #wald test for Csde versus IgG/Input
 so <- sleuth_wt(so, "Csde")
 wald_Csde <- sleuth_results(so, "Csde")
@@ -98,8 +103,9 @@ wald_Capture
 
 #Genes which with FDR<.05 and ln(FC) > 0 for Capture vs Csde/input & Csde vs Capture/Input
 ##Sept 21 2023 EDIT: Genes which with FDR<.05 and log 2 (FC) > 0 for Capture vs Csde/input & Csde vs Capture/Input
-Capture_ids <-  wald_Capture$target_id[which(wald_Capture$qval<.05 & wald_Capture$b > 0)]
-Csde_ids <- wald_Csde$target_id[which(wald_Csde$qval < 0.05 & wald_Csde$b > 0)]
+#adjust log 2 fold change cutoff to 1.3 (which is 2.5 X fold change)
+Capture_ids <-  wald_Capture$target_id[which(wald_Capture$qval<.05 & wald_Capture$b > 1.3)]
+Csde_ids <- wald_Csde$target_id[which(wald_Csde$qval < 0.05 & wald_Csde$b > 1.3)]
 
 #match the names of the rows for both conditions
 rownames(wald_Capture) <- wald_Capture$target_id
@@ -107,34 +113,38 @@ rownames(wald_Csde) <- wald_Csde$target_id
 
 #filter genes which are expressed higher in Capture than Csde
 Csde_ids_b_net_pos <- Csde_ids[which(-1*wald_Capture[Csde_ids,]$b < wald_Csde[Csde_ids,]$b)]  #subset the CSDE1 genes where the log2FC of Capture genes is less than the CSDE1 log 2 FC 
-Csde_ids_b_net_pos1 <- Csde_ids[which(wald_Capture[Csde_ids,]$b < wald_Csde[Csde_ids,]$b)]  #subset the CSDE1 genes where the the log2FC of Capture (input) genes is less than the CSDE1 log2FC
+Csde_ids_b_net_pos1 <- Csde_ids[which(wald_Capture[Csde_ids,]$b < wald_Csde[Csde_ids,]$b)]    #subset the CSDE1 genes where the log2FC of Capture (input) genes is less than the CSDE1 log2FC
 
 Csde_ids_b_net_pos <- intersect(Csde_ids_b_net_pos, Csde_ids_b_net_pos1)
 
 length(Csde_ids_b_net_pos)
 #5243
+# for log2 fold change cutoff of 1.3, this value is 2180
 
 #Comparison of Capture without Csde to IgG
 so <- sleuth_fit(so, ~Capture, "no_Csde")
 so <- sleuth_lrt(so, "no_Csde", "full")
-so <- sleuth_lrt(so, "no_Csde", "full")
+
 lrt_Capture <- sleuth_results(so, "no_Csde:full", test_type="lrt")
 table(lrt_Capture$qval < .05)
 lrt_Csde <- sleuth_results(so, "no_Csde:full", test_type="lrt")
 lrt_Csde_ids <- lrt_Csde$target_id[which(lrt_Csde$qval < .05)]
 length(intersect(Csde_ids_b_net_pos, lrt_Csde_ids))
 #5243
-write.table(wald_Capture, file = "wald.txt", sep="\t", quote=FALSE)
+#2180
+write.table(wald_Capture, file = "results/wald.txt", sep="\t", quote=FALSE)
+
+write.table(wald_Capture, file = "results/wald_test_Capture.txt", sep="\t", quote=FALSE)
 
 wald_Csde
 
 #Generate Table of results,
-write.table(data.frame(wald_Csde[Csde_ids_b_net_pos,], wald_Capture[Csde_ids_b_net_pos, c("qval","b")]), sep="\t", quote=FALSE, "Correct_Csde_Input_pos.txt")
+write.table(data.frame(wald_Csde[Csde_ids_b_net_pos,], wald_Capture[Csde_ids_b_net_pos, c("qval","b")]), sep="\t", quote=FALSE, "results/Correct_Csde_Input_pos_log2fc_cutoff_1.3.txt")
 
 #table for wald capture
-write.table(wald_Capture, "Corrected_Wald_capture.txt", sep = "\t", quote = FALSE)
+write.table(wald_Capture, "results/Corrected_Wald_capture.txt", sep = "\t", quote = FALSE)
 #log2 transformed table for wald capture 
-write.table(wald_Capture, "Corrected_Wald_capture_log2.txt", sep = "\t", quote = FALSE)
+write.table(wald_Capture, "results/Corrected_Wald_capture_log2.txt", sep = "\t", quote = FALSE)
 
 
 #table for wald Csde
@@ -290,3 +300,20 @@ ggplot (pc_data, aes(x=x, y=y, color = sample ))+
         panel.background = element_blank())
 
 
+############# Perform Gene Set Enrichment Analysis 
+
+#first extract the matrix of normalized values from Sleuth
+so_matrix <- sleuth_to_matrix(obj= so, which_df = "obs_norm", which_units = "scaled_reads_per_base")
+so_matrix <- as.data.frame(so_matrix)
+
+#remove the genes which have 0 variance between the samples
+so_matrix <- so_matrix[ which(apply(so_matrix, 1, var) != 0),]
+samples_log2 <- log2(so_matrix+0.5)
+
+#write the log 2 matrix of all samples into a csv file
+write.csv(samples_log2, "results/csde1_RIP_all_samples_ribodetector_log2.csv")
+
+#filter for just the genes which are high in CSDE1 mRNAs
+csde1_genes <- samples_log2[Csde_ids_b_net_pos,]
+
+row.names(csde1_genes)
