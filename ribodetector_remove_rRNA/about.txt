@@ -1,0 +1,1 @@
+this folder contains scripts for running the software Ribodetector to remove rRNA from the RNA sequencing data.
