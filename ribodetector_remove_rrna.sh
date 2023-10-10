@@ -63,6 +63,6 @@ sbatch ribodetector_script.slurm
 
 #download kallisto files from ARC; open local mobaXterm terminal window
 #navigate to C:\Users\queenie.tsang\Desktop\CSDE1\ribodetector
-rsync -axv --progress --partial -e queenie.tsang@arc-dtn.uclagary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
+rsync -axv --progress --partial -e queenie.tsang@arc-dtn.ucalgary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
 
 rsync -axv queenie.tsang@arc-dtn.ucalgary.ca:/work/yang_lab/queenie/csde1_RIP/ribodetector/kallisto .
