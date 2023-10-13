@@ -78,8 +78,14 @@ so <- sleuth_prep(s2c, ~Capture+Csde, aggregation_column="gene", gene_mode=TRUE,
 #sept 21 2023 edit:  transform counts using log2 instead of the default natural log, using the parameter: transform_fun_counts=function (x) log2(x+0.5) 
 so <- sleuth_prep(s2c, ~Capture+Csde, aggregation_column="gene", gene_mode=TRUE, extra_bootstrap_summary = TRUE, target_mapping=t2g, transform_fun_counts=function (x) log2(x+0.5), filter_fun=function(x){design_filter(design_matrix, x)})
 
+#########Oct 13 2023 analyze CSDE1 vs IgG and CSDE1 vs Capture separately
+#subset s2c for CSDE1 and IgG
+meta_csde_igg <-s2c[s2c$Condition %in% c("IgG", "Csde"),]
+design_matrix_csde_igg <- design_matrix[]
+so <- sleuth_prep(meta_csde_igg, aggregation_column = "gene", gene_mode=TRUE, extra_bootstrap_summary = TRUE, target_mapping=t2g, transform_fun_counts= function (x) log2(x+0.5), filter_fun=function(x){design_filter(design_matrix, x)})
 
 so <- sleuth_fit(so)
+
 
 #Plot PCA 
 sleuth_live(so)
@@ -107,6 +113,10 @@ wald_Capture
 Capture_ids <-  wald_Capture$target_id[which(wald_Capture$qval<.05 & wald_Capture$b > 1.3)]
 Csde_ids <- wald_Csde$target_id[which(wald_Csde$qval < 0.05 & wald_Csde$b > 1.3)]
 
+##### try different values for log 2 fold change cutoff values ie. fold change cut off of 1.5 ( which is equal to 0.58 for log 2 fold change)
+Capture_ids_log2fc_0.58 <-  wald_Capture$target_id[which(wald_Capture$qval<.05 & wald_Capture$b > 0.58)]
+Csde_ids_log2fc_0.58 <- wald_Csde$target_id[which(wald_Csde$qval < 0.05 & wald_Csde$b > 0.58)]
+
 #match the names of the rows for both conditions
 rownames(wald_Capture) <- wald_Capture$target_id
 rownames(wald_Csde) <- wald_Csde$target_id
@@ -114,12 +124,20 @@ rownames(wald_Csde) <- wald_Csde$target_id
 #filter genes which are expressed higher in Capture than Csde
 Csde_ids_b_net_pos <- Csde_ids[which(-1*wald_Capture[Csde_ids,]$b < wald_Csde[Csde_ids,]$b)]  #subset the CSDE1 genes where the log2FC of Capture genes is less than the CSDE1 log 2 FC 
 Csde_ids_b_net_pos1 <- Csde_ids[which(wald_Capture[Csde_ids,]$b < wald_Csde[Csde_ids,]$b)]    #subset the CSDE1 genes where the log2FC of Capture (input) genes is less than the CSDE1 log2FC
-
 Csde_ids_b_net_pos <- intersect(Csde_ids_b_net_pos, Csde_ids_b_net_pos1)
+
+Csde_ids_b_net_pos_log2fc_0.58 <- Csde_ids[which(-1*wald_Capture[Csde_ids_log2fc_0.58,]$b < wald_Csde[Csde_ids_log2fc_0.58,]$b)]  #subset the CSDE1 genes where the log2FC of Capture genes is less than the CSDE1 log 2 FC 
+Csde_ids_b_net_pos1_log2fc_0.58 <- Csde_ids[which(wald_Capture[Csde_ids_log2fc_0.58,]$b < wald_Csde[Csde_ids_log2fc_0.58,]$b)]    #subset the CSDE1 genes where the log2FC of Capture (input) genes is less than the CSDE1 log2FC
+Csde_ids_b_net_pos_log2fc_0.58 <- intersect(Csde_ids_b_net_pos_log2fc_0.58, Csde_ids_b_net_pos1_log2fc_0.58)
+
 
 length(Csde_ids_b_net_pos)
 #5243
 # for log2 fold change cutoff of 1.3, this value is 2180
+
+#for log 2 fold change of 0.58: 
+length(Csde_ids_b_net_pos_log2fc_0.58)
+#2618
 
 #Comparison of Capture without Csde to IgG
 so <- sleuth_fit(so, ~Capture, "no_Csde")
@@ -129,9 +147,14 @@ lrt_Capture <- sleuth_results(so, "no_Csde:full", test_type="lrt")
 table(lrt_Capture$qval < .05)
 lrt_Csde <- sleuth_results(so, "no_Csde:full", test_type="lrt")
 lrt_Csde_ids <- lrt_Csde$target_id[which(lrt_Csde$qval < .05)]
+
 length(intersect(Csde_ids_b_net_pos, lrt_Csde_ids))
 #5243
 #2180
+
+length(intersect(Csde_ids_b_net_pos_log2fc_0.58, lrt_Csde_ids))
+#2617
+
 write.table(wald_Capture, file = "results/wald.txt", sep="\t", quote=FALSE)
 
 write.table(wald_Capture, file = "results/wald_test_Capture.txt", sep="\t", quote=FALSE)
@@ -140,6 +163,8 @@ wald_Csde
 
 #Generate Table of results,
 write.table(data.frame(wald_Csde[Csde_ids_b_net_pos,], wald_Capture[Csde_ids_b_net_pos, c("qval","b")]), sep="\t", quote=FALSE, "results/Correct_Csde_Input_pos_log2fc_cutoff_1.3.txt")
+write.table(data.frame(wald_Csde[Csde_ids_b_net_pos_log2fc_0.58,], wald_Capture[Csde_ids_b_net_pos_log2fc_0.58, c("qval","b")]), sep="\t", quote=FALSE, "results/Correct_Csde_Input_pos_log2fc_cutoff_0.58.txt")
+
 
 #table for wald capture
 write.table(wald_Capture, "results/Corrected_Wald_capture.txt", sep = "\t", quote = FALSE)
@@ -273,11 +298,6 @@ so_matrix <- as.data.frame(so_matrix)
 #remove the genes which have 0 variance between the samples
 so_matrix <- so_matrix[ which(apply(so_matrix, 1, var) != 0),]
 samples_log2 <- log2(so_matrix+0.5)
-
-
-
-which(apply(samples_log2, 2, var)==0)
-
 
 str(csde1_pca)
 
