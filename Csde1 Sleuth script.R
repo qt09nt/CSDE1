@@ -78,22 +78,36 @@ so <- sleuth_prep(s2c, ~Capture+Csde, aggregation_column="gene", gene_mode=TRUE,
 #sept 21 2023 edit:  transform counts using log2 instead of the default natural log, using the parameter: transform_fun_counts=function (x) log2(x+0.5) 
 so <- sleuth_prep(s2c, ~Capture+Csde, aggregation_column="gene", gene_mode=TRUE, extra_bootstrap_summary = TRUE, target_mapping=t2g, transform_fun_counts=function (x) log2(x+0.5), filter_fun=function(x){design_filter(design_matrix, x)})
 
+so <- sleuth_fit(so)
 #########Oct 13 2023 analyze CSDE1 vs IgG and CSDE1 vs Capture separately
 #subset s2c for CSDE1 and IgG
 meta_csde_igg <-s2c[s2c$Condition %in% c("IgG", "Csde"),]
-design_matrix_csde_igg <- design_matrix[]
-so <- sleuth_prep(meta_csde_igg, aggregation_column = "gene", gene_mode=TRUE, extra_bootstrap_summary = TRUE, target_mapping=t2g, transform_fun_counts= function (x) log2(x+0.5), filter_fun=function(x){design_filter(design_matrix, x)})
+design_matrix_csde_igg <- design_matrix[1:6,]
 
-so <- sleuth_fit(so)
+
+##### first relevel the factors so that IgG is the base level 
+meta_csde_igg$Condition <- as.factor(meta_csde_igg$Condition)
+meta_csde_igg$Condition <- relevel(meta_csde_igg$Condition, ref= "IgG")
+
+so_csde_igg <- sleuth_prep(meta_csde_igg, aggregation_column = "gene", gene_mode=TRUE, extra_bootstrap_summary = TRUE, target_mapping=t2g, transform_fun_counts= function (x) log2(x+0.5), filter_fun=function(x){design_filter(design_matrix_csde_igg, x)})
+so_csde_igg <- sleuth_fit(so_csde_igg, ~Condition, 'full')
 
 
 #Plot PCA 
 sleuth_live(so)
+sleuth_live(so_csde_igg)
 
 #look at the genes contributing the most to the variances in PC1 and PC2
 plot_loadings(so, pc_input=1)
 plot_loadings(so, pc_input=2)
 
+#wald test for Csde1 versus IgG differential expression analysis 
+csde_vs_igg_wt <-sleuth_wt(so_csde_igg, which_beta = "ConditionCsde")
+
+#output results for csde1 vs IgG wald test
+sleuth_wald_test_csde_vs_IgG <- sleuth_results(csde_vs_igg_wt, test = "ConditionCsde", show_all = TRUE)
+
+write.csv(sleuth_wald_test_csde_vs_IgG, "results/wald_test_csde1_vs_IgG.csv")
 
 #wald test for Csde versus IgG/Input
 so <- sleuth_wt(so, "Csde")
