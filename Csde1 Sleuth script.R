@@ -320,6 +320,7 @@ ggplot(csde_input_filtered_log2, aes(x=input_values.average_input, y=csde_values
 
 
 ######### October 6 2023 PCA plot with ribodetector filtered samples
+#
 so_matrix <- sleuth_to_matrix(obj= so, which_df = "obs_norm", which_units = "scaled_reads_per_base")
 so_matrix <- as.data.frame(so_matrix)
 
@@ -334,18 +335,22 @@ csde1_pca <-prcomp(t(samples_log2), center = TRUE, scale = TRUE)$x
 summary(csde1_pca)
 
 #plot PC1 by PC2 
+#Oct 16 2023 - make modifications to PCA plot based on suggested changes from meeting
 pc_data = data.frame(x= csde1_pca[,1], y = csde1_pca[,2], sample = as.character(s2c$Condition))
 
 ggplot (pc_data, aes(x=x, y=y, color = sample ))+
-  geom_point(size=6) +
+  geom_point(size=15, alpha = 0.7) +    #transparency adjusted with "alpha" parameter
   scale_color_manual("Sample", values = c("blue", "darkgreen", "red") )+
   theme_bw() +
   xlab("PC1") +
   ylab("PC2") + 
-  theme(text = element_text(size = 14), 
+  theme(text = element_text(size = 16), 
+        axis.text=element_text(size=14),
+        axis.title=element_text(size=16,face="bold"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        panel.background = element_blank())
+        panel.background = element_blank(),
+        aspect.ratio=1)  #make the plot square
 
 
 ############# Perform Gene Set Enrichment Analysis 
