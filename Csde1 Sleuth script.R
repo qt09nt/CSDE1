@@ -84,7 +84,7 @@ so <- sleuth_fit(so)
 meta_csde_igg <-s2c[s2c$Condition %in% c("IgG", "Csde"),]
 design_matrix_csde_igg <- design_matrix[1:6,]
 
-#subset metadata tablef for just CSDE1 and Input samples
+#subset metadata table for just CSDE1 and Input samples
 meta_csde_capture <- s2c[s2c$Condition %in% c("Csde", "Capture"),]
 design_matrix_csde_input <-design_matrix[4:9, ]
   
@@ -336,9 +336,11 @@ summary(csde1_pca)
 
 #plot PC1 by PC2 
 #Oct 16 2023 - make modifications to PCA plot based on suggested changes from meeting
-pc_data = data.frame(x= csde1_pca[,1], y = csde1_pca[,2], sample = as.character(s2c$Condition))
+pc_data = data.frame(x= csde1_pca[,1], y = csde1_pca[,2], sample = row.names(csde1_pca))
 
-ggplot (pc_data, aes(x=x, y=y, color = sample ))+
+pc_data$condition <- c("Csde1", "Csde1", "Csde1", "IgG", "IgG", "IgG", "Input", "Input", "Input")
+  
+p <- ggplot (pc_data, aes(x=x, y=y, color = condition, label = sample))+
   geom_point(size=15, alpha = 0.7) +    #transparency adjusted with "alpha" parameter
   scale_color_manual("Sample", values = c("blue", "darkgreen", "red") )+
   theme_bw() +
@@ -351,6 +353,8 @@ ggplot (pc_data, aes(x=x, y=y, color = sample ))+
         panel.grid.minor = element_blank(),
         panel.background = element_blank(),
         aspect.ratio=1)  #make the plot square
+
+p + geom_text()
 
 
 ############# Perform Gene Set Enrichment Analysis 
