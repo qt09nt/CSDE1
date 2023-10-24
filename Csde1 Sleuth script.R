@@ -12,7 +12,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("rhdf5", force = TRUE)
 install.packages("devtools")
 remotes::install_github("pachterlab/sleuth#260")
-library("sleuth")
+library(sleuth)
 #install.packages("ggplot2")
 library(ggplot2)
 
@@ -116,12 +116,51 @@ csde_vs_igg_wt <-sleuth_wt(so_csde_igg, which_beta = "ConditionCsde")
 
 #output results for csde1 vs IgG wald test
 sleuth_wald_test_csde_vs_IgG <- sleuth_results(csde_vs_igg_wt, test = "ConditionCsde", show_all = TRUE)
-write.csv(sleuth_wald_test_csde_vs_IgG, "results/wald_test_csde1_vs_IgG.csv")
+
+#remove the genes with NA for all samples 
+new_sleuth_wald_test_csde_vs_IgG <- na.omit(sleuth_wald_test_csde_vs_IgG)
+write.csv(new_sleuth_wald_test_csde_vs_IgG, "results/wald_test_csde1_vs_IgG.csv")
 
 #wald test for Csde1 versus Capture differential expression analysis
 csde1_vs_input_wt <- sleuth_wt(so_csde_capture, which_beta = "ConditionCsde")
 sleuth_wald_test_csde_vs_input <- sleuth_results(csde1_vs_input_wt, test = "ConditionCsde", show_all = TRUE)
-write.csv(sleuth_wald_test_csde_vs_input, "results/wald_test_csde1_vs_input.csv")
+
+#remove all the genes which have NA for all the samples
+new_sleuth_wald_test_csde_vs_input <- na.omit(sleuth_wald_test_csde_vs_input)
+write.csv(new_sleuth_wald_test_csde_vs_input, "results/wald_test_csde1_vs_input.csv")
+
+##### try filtering with different threshold values for qvalue and b (log2 fold change)
+
+#### filter with q value =< 0.01 and b value (log2 fold change) > 1.3
+wald_test_csde_vs_IgG_qvalue_0.01 <- new_sleuth_wald_test_csde_vs_IgG[new_sleuth_wald_test_csde_vs_IgG$qval <= 0.01, ]
+wald_test_csde_vs_IgG_bvalue_1.3 <- wald_test_csde_vs_IgG_qvalue_0.01[wald_test_csde_vs_IgG_qvalue_0.01$b >1.3, ]
+#1775 genes
+
+wald_test_csde_vs_Input_qvalue_0.01 <- new_sleuth_wald_test_csde_vs_input[new_sleuth_wald_test_csde_vs_input$qval <= 0.01, ]
+wald_test_csde_vs_Input_bvalue_1.3 <- wald_test_csde_vs_Input_qvalue_0.01[wald_test_csde_vs_Input_qvalue_0.01$b > 1.3,]
+#2355 genes
+
+#### see which genes overlap between the CSDE vs IgG and CSDE vs Input genes when filtered by qvalue <= 0.01 and b value (log 2 fold change) > 1.3
+csde1_enriched_qvalue_0.01_bvalue_1.3 <- intersect(wald_test_csde_vs_IgG_bvalue_1.3$target_id, wald_test_csde_vs_Input_bvalue_1.3$target_id) 
+write.csv(csde1_enriched_qvalue_0.01_bvalue_1.3, "results/csde1_overlap_qvalue_0.01_bvalue_1.3.csv")
+#1034 genes 
+
+
+############ try filtering by qvalue <= 0.01 and b value (log 2 )
+csde_vs_IgG_bvalue_2 <- wald_test_csde_vs_IgG_qvalue_0.01[wald_test_csde_vs_IgG_qvalue_0.01$b > 2,]
+csde_vs_input_bvalue_2 <- wald_test_csde_vs_Input_qvalue_0.01[wald_test_csde_vs_Input_qvalue_0.01$b > 2,]
+
+#see which genes overlap between CSDE vs IgG and CSDE1 vs Input genes when filtered by qvalue <=0.01 and 
+csde_enriched_qvalue_0.01_bvalue_2 <- intersect(csde_vs_IgG_bvalue_2$target_id, csde_vs_input_bvalue_2$target_id)
+
+#write.csv
+write.csv(csde_enriched_qvalue_0.01_bvalue_2, "results/csde1_overlap_qvalue_0.01_bvalue_2.csv")
+
+
+
+
+############ grouped analysis ie. Csde vs IgG/Input may not be suitable for the purposes of this current paper
+
 
 #wald test for Csde versus IgG/Input
 so <- sleuth_wt(so, "Csde")
