@@ -18,7 +18,7 @@ https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
 export PATH=$PATH:/work/yang_lab/1_Software/sratoolkit.3.0.7-centos_linux64/bin
 
 #get these samples
-GSM1229978: M_P0_WT_0; Mus musculus; RNA-Seq (SRR980305)
+           GSM1229978: M_P0_WT_0; Mus musculus; RNA-Seq (SRR980305)
 SRX349397: GSM1229979: M_P0_WT_1; Mus musculus; RNA-Seq (SRR980306)
 SRX349398: GSM1229980: M_P0_WT_2; Mus musculus; RNA-Seq (SRR980307)
 
