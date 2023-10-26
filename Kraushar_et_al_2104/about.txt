@@ -1,0 +1,6 @@
+Analysis of mouse cortical WT P0 external dataset obtained from the Data Availability section of the paper:
+"Kraushar, M. L., Thompson, K., Wijeratne, H. R. S., Viljetic, B., Sakers, K., Marson, J. W., Kontoyiannis, D. L., Buyske, S., Hart, R. P., & Rasin, M. R. (2014). 
+  Temporally defined neocortical translation and polysome assembly are determined by the RNA-binding protein Hu antigen R. Proceedings of the National Academy of Sciences 
+  of the United States of America, 111(36). https://doi.org/10.1073/pnas.1408305111"
+
+https://www.pnas.org/doi/full/10.1073/pnas.1408305111
