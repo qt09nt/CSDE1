@@ -15,7 +15,7 @@ tar -xzf sratoolkit.3.0.7-centos_linux64.tar.gz
 https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
 
 #export the SRA bin directory onto the $PATH variable
-export PATH=$PATH:$HOME/Desktop/sratoolkit.3.0.5-mac64/bin
+export PATH=$PATH:/work/yang_lab/1_Software/sratoolkit.3.0.7-centos_linux64/bin
 
 #get these samples
 GSM1229978: M_P0_WT_0; Mus musculus; RNA-Seq (SRR980305)
