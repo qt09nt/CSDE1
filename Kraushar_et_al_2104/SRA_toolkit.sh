@@ -36,3 +36,5 @@ SRX349408: GSM1229990: T_P0_WT_2; Mus musculus; RNA-Seq (SRR980317)
 #submit bash script for batch SRA download
 sbatch auto_SRA.slurm
 
+#rename fastq files with sample names
+
