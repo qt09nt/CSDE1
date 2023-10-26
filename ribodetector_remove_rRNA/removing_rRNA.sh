@@ -135,6 +135,25 @@ ribodetector -t 20   -l 181   -i /work/yang_lab/queenie/Celf2-KI-Polysome-seq/fa
 #check linux distribution version
 cat /etc/os-release
 
+### output for linux distribution:
+NAME="Rocky Linux"
+VERSION="8.8 (Green Obsidian)"
+ID="rocky"
+ID_LIKE="rhel centos fedora"
+VERSION_ID="8.8"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="Rocky Linux 8.8 (Green Obsidian)"
+ANSI_COLOR="0;32"
+LOGO="fedora-logo-icon"
+CPE_NAME="cpe:/o:rocky:rocky:8:GA"
+HOME_URL="https://rockylinux.org/"
+BUG_REPORT_URL="https://bugs.rockylinux.org/"
+SUPPORT_END="2029-05-31"
+ROCKY_SUPPORT_PRODUCT="Rocky-Linux-8"
+ROCKY_SUPPORT_PRODUCT_VERSION="8.8"
+REDHAT_SUPPORT_PRODUCT="Rocky Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.8"
+
 #check the version of CUDA with 
 nvcc --version
 
