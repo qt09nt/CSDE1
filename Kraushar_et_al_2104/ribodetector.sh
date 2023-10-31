@@ -18,78 +18,70 @@ cd /work/yang_lab/1_Software/
 #input=/work/yang_lab/queenie/krausher_2014/fastq/
 #output=/work/yang_lab/queenie/krausher_2014/ribodetector/
 
-# Run
-i=0
-
 ##### Run ribodetector GPU version
         apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
                 -i "/work/yang_lab/queenie/krausher_2014/fastq/T_P0_WT_0_SRR980315_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/T_P0_WT_0_SRR980315_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_0_SRR980315_1.fastq.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_0_SRR980315_2.fastq.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_0_SRR980315_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_0_SRR980315_2.norrna.fastq"
 
 
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/T_P0_WT_1_SRR980316_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/T_P0_WT_1_SRR980316_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/${file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/{file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_1_SRR980316_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_1_SRR980316_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/T_P0_WT_2_SRR980317_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/T_P0_WT_2_SRR980317_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/{file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/{file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_2_SRR980317_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/T_P0_WT_2_SRR980317_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/M_P0_WT_0_SRR980305_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/M_P0_WT_0_SRR980305_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/{file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/{file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/M_P0_WT_0_SRR980305_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/M_P0_WT_0_SRR980305_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/M_P0_WT_1_SRR980306_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/M_P0_WT_1_SRR980306_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/${file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/{file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/M_P0_WT_1_SRR980306_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/M_P0_WT_1_SRR980306_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/M_P0_WT_2_SRR980307_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/M_P0_WT_2_SRR980307_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/{file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/{file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/M_P0_WT_2_SRR980307_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/M_P0_WT_2_SRR980307_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/P_P0_WT_0_SRR980310_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/P_P0_WT_0_SRR980310_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/${file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/${file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/P_P0_WT_0_SRR980310_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/P_P0_WT_0_SRR980310_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "/work/yang_lab/queenie/krausher_2014/fastq/${file1}" "/work/yang_lab/queenie/krausher_2014/fastq/${file2}" \
+                -i "/work/yang_lab/queenie/krausher_2014/fastq/P_P0_WT_1_SRR980311_1.fastq" "/work/yang_lab/queenie/krausher_2014/fastq/P_P0_WT_1_SRR980311_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/${file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/${file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/P_P0_WT_1_SRR980311_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/P_P0_WT_1_SRR980311_2.norrna.fastq"
 
   apptainer run --nv -B /work/yang_lab ribodetector_image.sif ribodetector -t 20 -l 100 \
-                -i "${input}${file1}" "${input}${file2}" \
+                -i "input=/work/yang_lab/queenie/krausher_2014/fastq/P_P0_WT_2_SRR980312_1.fastq" "input=/work/yang_lab/queenie/krausher_2014/fastq/P_P0_WT_2_SRR980312_2.fastq" \
                 -m 12 \
                 -e norrna \
                 --chunk_size 256 \
-                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/${file1}.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/${file2}.norrna.fastq"
+                -o "/work/yang_lab/queenie/krausher_2014/ribodetector/P_P0_WT_2_SRR980312_1.norrna.fastq" "/work/yang_lab/queenie/krausher_2014/ribodetector/P_P0_WT_2_SRR980312_2.norrna.fastq"
 
-cd /work/yang_lab/1_Software/
 
-echo "trial" $i "complete"
-((i++))
-echo "-------------"
-done
