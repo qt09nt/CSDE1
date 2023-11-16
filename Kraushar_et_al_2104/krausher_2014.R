@@ -181,3 +181,122 @@ setwd("C:/Users/queenie.tsang/Desktop/CSDE1/Kraushar et al 2014 dataset/results/
 write.csv(WTpoly_vs_WTmono_expr_protein_coding_log2, "Krausher_WTpoly_vs_WTmono_expr_protein_coding_log2.csv")
 write.csv(WTpoly_vs_WTtotal_expr_matrix_protein_coding_log2,"WTpoly_vs_WTtotal_expr_matrix_protein_coding_log2.csv")
 write.csv(WTmono_vs_WTtotal_expr_matrix_protein_coding_log2, "WTmono_vs_WTtotal_expr_matrix_protein_coding_log2.csv")
+
+
+
+##################### try to overlay CDS information over the mono/total (x-axis) and poly/total (y-axis) for Krausher et al  (2014) dataset 
+
+##### read in the Krausher et al (2014) wild type mono/total table and poly/total tables from Kallisto-Sleuth
+setwd("C:/Users/queenie.tsang/Desktop/CSDE1/Kraushar et al 2014 dataset/results/")
+
+krausher_wtmono_Wttotal <- read.csv("sleuth_wald_test_WTmono_vs_WTtotal_protein_coding.csv", header=TRUE)
+krausher_wtpoly_wttotal <- read.csv("sleuth_wald_test_WTpoly_vs_WTtotal_protein_coding.csv", header= TRUE)
+
+#read in ENSEMBL Biomart Mouse genes (GRCm39) protein coding genes information
+genes <- read.csv("mouse_ensembl_biomart_mouse_genes_GRCm39.txt", header=TRUE)
+
+#first plot the mono/total numbers on the x-axis and the poly/total numbers on the y-axis from 
+#the Krausher (2014) dataset
+#merge into single dataframe before plotting
+
+merged_krausher <- merge(krausher_wtmono_Wttotal, krausher_wtpoly_wttotal, by.x = "target_id", by.y = "target_id")
+
+library(ggplot2)
+library(RColorBrewer)
+
+ggplot(merged_krausher, aes(x=b.x, y=b.y)) +
+  geom_point() +
+  theme_bw() +
+  ylab("Wald test b value Krausher et al (2014) WT-poly vs WT-total") +
+  xlab("Wald test b value Krausher et al (2014) WT-mono vs WT-total")
+
+#convert gene names to capitals to match those of the merged_krausher table
+genes$Gene.name <- toupper(genes$Gene.name)
+
+merge_krausher_genes <- merge(merged_krausher, genes, by.x="target_id", by.y="Gene.name")
+
+ggplot(merge_krausher_genes, aes(x=b.x, y=b.y)) +
+  geom_point(aes(colour = Transcript.length..including.UTRs.and.CDS.,  alpha = 0.5 )) +  #use alpha parameter to adjust transparency of the dots
+  theme_bw() +
+  #scale_fill_gradient(low="black", high="green")+
+  scale_colour_gradient2(low = "#3288bd", mid = "#fee08b", high = "#d53e4f", midpoint = median(merge_krausher_genes$`Transcript.length..including.UTRs.and.CDS.`, rm.na = TRUE))+
+  ylab("Wald test b value Krausher et al (2014) WT-poly vs WT-total") +
+  xlab("Wald test b value Krausher et al (2014) WT-mono vs WT-total")
+
+set.seed(1)
+df <- data.frame(
+  x = runif(100),
+  y = runif(100),
+  z1 = rnorm(100),
+  z2 = abs(rnorm(100))
+)
+
+df_na <- data.frame(
+  value = seq(1, 20),
+  x = runif(20),
+  y = runif(20),
+  z1 = c(rep(NA, 10), rnorm(10))
+)
+
+# Default colour scale colours from light blue to dark blue
+ggplot(df, aes(x, y)) +
+  geom_point(aes(colour = z2))
+
+
+# For diverging colour scales use gradient2
+ggplot(df, aes(x, y)) +
+  geom_point(aes(colour = z1)) +
+  scale_colour_gradient2()
+
+
+# Use your own colour scale with gradientn
+ggplot(df, aes(x, y)) +
+  geom_point(aes(colour = z1)) +
+  scale_colour_gradientn(colours = terrain.colors(10))
+
+
+# Equivalent fill scales do the same job for the fill aesthetic
+ggplot(faithfuld, aes(waiting, eruptions)) +
+  geom_raster(aes(fill = density)) +
+  scale_fill_gradientn(colours = terrain.colors(10))
+
+
+# Adjust colour choices with low and high
+ggplot(df, aes(x, y)) +
+  geom_point(aes(colour = z2)) +
+  scale_colour_gradient(low = "white", high = "black")
+
+# Avoid red-green colour contrasts because ~10% of men have difficulty
+# seeing them
+
+# Use `na.value = NA` to hide missing values but keep the original axis range
+ggplot(df_na, aes(x = value, y)) +
+  geom_bar(aes(fill = z1), stat = "identity") +
+  scale_fill_gradient(low = "yellow", high = "red", na.value = NA)
+
+
+ggplot(df_na, aes(x, y)) +
+  geom_point(aes(colour = z1)) +
+  scale_colour_gradient(low = "yellow", high = "red", na.value = NA)
+
+
+##############
+### try to plot ORF length (x-axis) and b value from wald test between WT polysome vs WT monosome
+
+krausher_wtpoly_wtmono_wald_test <- read.csv("C:/Users/queenie.tsang/Desktop/CSDE1/Kraushar et al 2014 dataset/results/sleuth_wald_test_WTpoly_vs_WTmono_protein_coding.csv")
+
+genes$Gene.name <- toupper(genes$Gene.name)
+
+#merge the Genes table and the krausher_wtpoly_wtmono_wald_test df
+krausher_WTpoly_WTmono_waldtest_genes <- merge(krausher_wtpoly_wtmono_wald_test, genes, by.x = "target_id", by.y = "Gene.name")
+
+#convert the Transcript length from numeric to factor type
+krausher_WTpoly_WTmono_waldtest_genes$Transcript.length..including.UTRs.and.CDS. <- as.factor(krausher_WTpoly_WTmono_waldtest_genes$Transcript.length..including.UTRs.and.CDS.)
+
+
+#plot transcript length on the x-axis and the wald test bvalue for krausher (2014) WTpoly vs WTmono on y-axis
+ggplot(krausher_WTpoly_WTmono_waldtest_genes, aes(x=Transcript.length..including.UTRs.and.CDS., y= b)) +
+  geom_point()+
+  labs(x= "Transcript.length..including.UTRs.and.CDS.", 
+       y = "Wald Test B value Wild Type Polysome vs Wild Type Monosome",
+       title= "Krausher et al (2014)")
