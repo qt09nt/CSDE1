@@ -4,6 +4,11 @@
 # Modified by Reza Aghanoori June 2022
 #modified by Queenie Tsang September 2023
 
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(EnhancedVolcano)
 
 #-------------------------------- Data Fetching -----------------------------------
 if (!require("BiocManager", quietly = TRUE))
@@ -16,11 +21,18 @@ library(sleuth)
 #install.packages("ggplot2")
 library(ggplot2)
 
+
+#read in functions 
+setwd("C:/Users/queenie.tsang/Desktop/CELF2/Celf2-KI-Polysome-seq/R")
+source("Cefl2_polysome_seq_functions.R")
+
+
 # folder containing all *.kallisto folders used with a metadata table
 #setwd("/Users/rezaaghanoori/Desktop/June2022, Csde1 RIP Seq data/CSDE1 Kallisto") 
 setwd("C:/Users/queenie.tsang/Desktop/June2022, Csde1 RIP Seq data/1.CSDE1 Kallisto")
 
 setwd("C:/Users/queenie.tsang/Desktop/CSDE1/ribodetector")
+
 
 #load in the kallisto files with fastq sample files filtered to remove rRNA  using Ribodetector
 
@@ -413,3 +425,50 @@ write.csv(samples_log2, "results/csde1_RIP_all_samples_ribodetector_log2.csv")
 csde1_genes <- samples_log2[Csde_ids_b_net_pos,]
 
 row.names(csde1_genes)
+
+########### volcano plot for CSDE1 vs IgG  December 20 2023
+
+setwd("C:/Users/queenie.tsang/Desktop/CSDE1/ribodetector/results")
+
+csde1_vs_IgG_wald_test <- read.csv("wald_test_csde1_vs_IgG.csv")
+
+#read in protein coding genes list from ENSEMBL
+protein_coding <- read.csv("protein_coding_genes_biomart_ensembl.txt")
+protein_coding$gene_caps <- toupper(protein_coding$Gene.name)
+
+# filter the CSDE1 vs IgG for protein coding genes 
+csde1_vs_IgG_wald_test$target_id <- toupper(csde1_vs_IgG_wald_test$target_id)
+
+csde1_vs_IgG_protein_coding <- csde1_vs_IgG_wald_test[csde1_vs_IgG_wald_test$target_id %in% protein_coding$gene_caps,]
+
+volcano_plot_sleuth_wald_test(top_table = csde1_vs_IgG_protein_coding, title = "CSDE1 vs IgG wald test qvalue cutoff 0.0001 log2fc cutoff ", fold_change_cutoff= 1.5, pvalue_cutoff= 0.001)
+
+volcano_plot2(top_table = csde1_vs_IgG_protein_coding, title= "CSDE1 vs IgG ")
+
+volcano_plot2 (csde1_vs_IgG_protein_coding, title= "CSDE1 vs IgG pvalue_cutoff = 0.0001, log2fc_cutoff = 1.5", pvalue_cutoff = 0.0001, log2fc_cutoff = 1.5)
+
+library(ggrepel)
+library(ggplot2)
+
+#for the plot just label select genes of interest, and italicize the labels
+lab_italics <- paste0("italic('", csde1_vs_IgG_protein_coding$target_id, "')") 
+
+selectLab_italics = paste0(
+  "italic('",
+  c('Tle4', 'Tbr1', 'Pou3f3', 'Satb2', 'Fezf2', 'Fezf1', 'Bcl11b'), "')")
+
+#for the top table, convert gene names to Capital first letter and lowercase the rest of the gene name to indicate it's a mouse gene (not human)
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'BCL11B' ] <- 'Bcl11b'
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'TLE4' ] <- 'Tle4'
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'TBR1' ] <- 'Tbr1'
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'POU3F3' ] <- 'Pou3f3'
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'SATB2' ] <- 'Satb2'
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'FEZF2' ] <- 'Fezf2'
+csde1_vs_IgG_protein_coding$target_id[csde1_vs_IgG_protein_coding$target_id == 'FEZF1' ] <- 'Fezf1'
+
+#selectLabel = c('Rpl7', 'Rpl34', 'Rpl13a', 'Gapdh', 'Actb', 'Camk2a', 'Rbfox1', 'Bcl11b', 'Tubb3', 'Tuba1a')
+selectLabel =  c('Tle4', 'Tbr1', 'Pou3f3', 'Satb2', 'Fezf2', 'Fezf1', 'Bcl11b')
+
+#volcano_plot_sleuth(top_table=WT_mono_vs_poly_wald_test, title="WT-mono_versus_WT-poly_Wald_Test", fold_change_cutoff=1.32, pvalue_cutoff=0.05)
+volcano_plot_sleuth(top_table=csde1_vs_IgG_protein_coding, title="CSDE1 vs IgG protein coding", fold_change_cutoff=1.5, pvalue_cutoff=0.0001)
+
