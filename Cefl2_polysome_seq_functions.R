@@ -22,12 +22,14 @@ volcano_plot_sleuth = function(top_table, title, fold_change_cutoff, pvalue_cuto
   v = EnhancedVolcano(#top_table, x="b", y= "qval",  lab=top_table$target_id, title = title,
                       #top_table, x="b", y= "qval",  lab=lab_italics, title = title,
                       
-                      top_table, x="avg_log2fc", y= "qval",  lab=lab_italics, title = title,
-                      
+                      #top_table, x="avg_log2fc", y= "qval",  lab=lab_italics, title = title,
+                      top_table, x="b", y= "qval",  lab=lab_italics, title = title,
+    
                       pCutoff = pvalue_cutoff, FCcutoff = fold_change_cutoff, 
                      # ylim = c(0, max(-log10(top_table$qval), na.rm=TRUE)),
                       #col = c("grey30", "#A4D49C", "#4E80A5", "#F68D91"),
                      ylab= '-log10(q value)',
+                     col = c("lightgrey", "cyan3", "#A4D49C",  "coral2"),
                      #selectLab = selectLabel,
                      selectLab = selectLab_italics,
                      boxedLabels = FALSE,
@@ -39,12 +41,19 @@ volcano_plot_sleuth = function(top_table, title, fold_change_cutoff, pvalue_cuto
                      directionConnectors = 'both',
                      arrowheads = TRUE,
                      parseLabels = TRUE,
-                     colAlpha = 0.30)  #this adjusts the transparency of the points 
+                     colAlpha = 0.50)  #this adjusts the transparency of the points 
   #pdf(paste("../figures/", title, "volcano.pdf"), width = 8, height = 8)
-  pdf(paste("C:/Users/queenie.tsang/Desktop/CELF2/Celf2-KI-Polysome-seq/figures/", title, "likelihood_ratio_test_norm_fun_counts.pdf"), width = 8, height = 8)
-  print(v)
-  dev.off()
-  return(v)
+  #pdf(paste("C:/Users/queenie.tsang/Desktop/CELF2/Celf2-KI-Polysome-seq/figures/", title, "wald_test_volcano.pdf"), width = 8, height = 8)
+  #pdf(paste("C:/Users/queenie.tsang/Desktop/CSDE1/ribodetector/figures", title, "wald_test_volcano.pdf"), width = 8, height = 8)
+  
+  #print(v)
+  plot(v) +
+    ggplot2::scale_x_continuous(   #this shows the axis label tick marks on x axis 
+      breaks=seq(-10,10, 1))
+  
+  
+  #dev.off()
+  #return(v)
 }
 
 
@@ -75,7 +84,9 @@ volcano_plot_sleuth_wald_test = function(top_table, title, fold_change_cutoff, p
     parseLabels = TRUE,
     colAlpha = 0.30)  #this adjusts the transparency of the points 
   #pdf(paste("../figures/", title, "volcano.pdf"), width = 8, height = 8)
-  pdf(paste("C:/Users/queenie.tsang/Desktop/CELF2/Celf2-KI-Polysome-seq/figures/", title, "sleuth_wald_test_volcano.pdf"), width = 8, height = 8)
+  #pdf(paste("C:/Users/queenie.tsang/Desktop/CELF2/Celf2-KI-Polysome-seq/figures/", title, "sleuth_wald_test_volcano.pdf"), width = 8, height = 8)
+  pdf(paste("C:/Users/queenie.tsang/Desktop/CSDE1/ribodetector/figures", title, "wald_test_volcano.pdf"), width = 8, height = 8)
+  
   print(v)
   dev.off()
   return(v)
@@ -340,16 +351,46 @@ celf2_csde1_scatterplot2<- function(merged_table){
 #this first plots all genes in light grey in a scatterplot x-axis WTpoly-WTtotal, and y-axis WTpoly-WTmono
 celf2_csde1_scatterplot3<- function(merged_table){
   p <- ggplot(data = merged_table,               ## this alters the order in which the points are plotted, so that CSDE1 plots are on top
-              aes(x=b.x, y=b.y, alpha=0.1)) +
+              aes(x=b.x, y=b.y, alpha=0.1, label = target_id)) +
     
-    geom_point(stat="identity", size = 5, colour="lightgrey", show.legend = FALSE) +
+    #label select genes that are layer marker genes
+    geom_label(data=subset(merged_table, target_id %in% c("TBR1", "SATB2", "TLE4", "POU3F3", "FEZF2", "FEZF1")))+
+  
+    
+    #geom_point(stat="identity", size = 5, colour="lightgrey", show.legend = FALSE) +
+    geom_point(stat="identity", size = 2, colour="cyan4", show.legend = FALSE) +
+    
     labs(x=("wald test b value WT poly vs WT total"),
          y=("wald test b value WT poly vs WT mono"),
          
-         title=("CELF2-KI_Polysome-seq - filtered for protein coding genes")) +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-          panel.background = element_blank(), axis.line = element_line(colour = "black"))
+         title=("CELF2-KI_Polysome-seq - filtered for protein coding genes")) #+
+    #theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    #      panel.background = element_blank(), axis.line = element_line(colour = "black"))
   
   plot(p)
+}
+
+#this function is for retrieving the list of genes within a specified box on the scatterplot
+#of CELF2 WTpoly-WTtotal vs WTpoly-vs-WTmono and overlay of CSDE1 vs IgG b value
+#input min.x is the minimum x value; max.x is maximum x value
+#input min.y is the minimum y value; and max.y is the maximum y value
+get_box_genes <- function(merged_df, max.x, min.x, max.y, min.y ){
+  box_x <- merged_df[merged_df$b.x <= max.x & merged_df$b.x >= min.x,]
+  box_y <- box_x[box_x$b.y <= max.y & box_x$b.y >= min.y,]
+  return(box_y)
+}
+
+volcano_plot2 = function(top_table, title, pvalue_cutoff, log2fc_cutoff){
+  v = EnhancedVolcano(top_table, x="b", y= "qval", lab=(top_table$target_id), title = title,
+                      pCutoff =pvalue_cutoff, FCcutoff = log2fc_cutoff, 
+                      ylab= '-log10(q value)',
+                      ylim = c(0, max(-log10(top_table$qval), na.rm=TRUE)),
+                      col = c("lightgrey", "cyan3", "lightgrey",  "lightcoral"),
+                      colAlpha = 1.0)
+  #pdf(paste("C:/Users/queenie.tsang/Desktop/CELF2/Celf2-KI-Polysome-seq/figures/", title, "volcano.pdf"), width = 8, height = 8)
+ # pdf(paste("C:/Users/queenie.tsang/Desktop/CSDE1/ribodetector/figures", title, "volcano.pdf"), width = 8, height = 8)
+  print(v)
+  dev.off()
+  return(v)
 }
 
