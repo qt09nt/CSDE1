@@ -1,0 +1,22 @@
+#Custom Tracks for UCSC Genome Browser to visualize the transcript data 
+#from Kraushar et al (2014) P0 mouse cortex polysome RNA seq data
+
+#https://genome-euro.ucsc.edu/goldenPath/help/bam.html
+
+track type=bam name="M_P0_WT_0" color=242,80,34 visibility=2 description="Kraushar et al. (2014) Wild Type Monosome at P0 sample 0" bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/M_P0_WT_0_SRR980305.sorted.bam
+
+track type=bam name="M_P0_WT_1" color=127,186,0 visibility=2 description="Kraushar et al. (2014) Wild Type Monosome at P0 sample 1" bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/M_P0_WT_1_SRR980306.sorted.bam
+
+track type=bam name="M_P0_WT_2" color=0,164,239 visibility=2 description="Kraushar et al. (2014) Wild Type Monosome at P0 sample 2" bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/M_P0_WT_2_SRR980307.sorted.bam
+
+track type=bam name="P_P0_WT_0" description="Kraushar et al. (2014) Wild Type Polysome at P0 sample 0" color=255,185,0 visibility=2 bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/P_P0_WT_0_SRR980310.sorted.bam
+
+track type=bam name="P_P0_WT_1" description="Kraushar et al. (2014) Wild Type Polysome at P0 sample 1" color=115,115,115 visibility=2 bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/P_P0_WT_1_SRR980311.sorted.bam
+
+track type=bam name="P_P0_WT_2" description="Kraushar et al. (2014) Wild Type Polysome at P0 sample 2" color=0,0,0 visibility=2 bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/P_P0_WT_2_SRR980312.sorted.bam
+
+track type=bam name="T_P0_WT_0" description="Kraushar et al. (2014) Wild Type Total at P0 sample 0" color=255,0,0 visibility=2 bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/T_P0_WT_0_SRR980315.sorted.bam
+
+track type=bam name="T_P0_WT_1" description="Kraushar et al. (2014) Wild Type Total at P0 sample 1" color=255,123,0 visibility=2 bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/T_P0_WT_1_SRR980316.sorted.bam
+
+track type=bam name="T_P0_WT_2" description="Kraushar et al. (2014) Wild Type Total at P0 sample 2" color=14,29,85 visibility=2 bigDataUrl=https://data.cyverse.org/dav-anon/iplant/home/qtsang09/krausher_et_al_2014_polysome_seq_mouse_cortex/T_P0_WT_2_SRR980317.sorted.bam
