@@ -1,0 +1,10 @@
+﻿#,Sample,State,Csde,Capture,Sample Name ,kallisto files ,sample_name_confirmation,path
+1,Input1,Capture,0,1,Li35179_S1_R1_001.fastq,0.kallisto,Li35179_S1_R1_001.fastq,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/0.kallisto
+2,Input2,Capture,0,1,Li35180_S2_R1_001.fastq,1.kallisto,Li35180_S2_R1_001.fastq,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/1.kallisto
+3,Input3,Capture,0,1,Li35181_S3_R1_001.fastq,2.kallisto,Li35181_S3_R1_001,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/2.kallisto
+4,IgG1,IgG,0,0,Li35182_S4_R1_001.fastq,3.kallisto,/Li35182_S4_R1_001.,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/3.kallisto
+5,IgG2,IgG,0,0,Li35183_S5_R1_001.fastq,4.kallisto,Li35183_S5_R1_001,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/4.kallisto
+6,IgG3,IgG,0,0,Li35184_S6_R1_001.fastq,5.kallisto,Li35184_S6_R1_001,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/5.kallisto
+7,Csde1_1,Csde,1,0,Li35185_S7_R1_001.fastq,6.kallisto,Li35185_S7_R1_001,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/6.kallisto
+8,Csde1_2,Csde,1,0,Li35186_S8_R1_001.fastq,7.kallisto,/Li35186_S8_R1_001,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/7.kallisto
+9,Csde1_3,Csde,1,0,Li35187_S9_R1_001.fastq,8.kallisto,/Li35187_S9_R1_001,C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_output/8.kallisto
