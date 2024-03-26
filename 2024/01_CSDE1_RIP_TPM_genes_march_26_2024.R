@@ -57,6 +57,10 @@ CSDE1_IgG_kallisto_table_keep <- CSDE1_IgG_kallisto_table[,c("target_id", "sampl
 
 CSDE1_IgG_expression <- CSDE1_IgG_kallisto_table_keep %>% spread(key = sample, value = tpm)
 
+#save the expression matrix 
+write.csv(CSDE1_IgG_expression, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/results/CSDE1_IgG_all_genes_expression_TPM.csv")
+
+
 CSDE1_IgG_expression$target_id <- toupper(CSDE1_IgG_expression$target_id) 
   
 #### keep just the genes requested: Pabpc1, Vim, FABP7, Ybx1
@@ -103,3 +107,23 @@ CSDE1_IgG_expression_genes_set2 <- CSDE1_IgG_expression[CSDE1_IgG_expression$tar
 
 ### save to csv
 write.csv(CSDE1_IgG_expression_genes_set2, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/results/CSDE1_IgG_expression_genes_set2.csv")
+
+
+### read in the TPM layer genes file
+TMP_layer_genes <-read.csv("C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/results/TMP_layer.csv")
+
+TMP_layer_genes <- na.omit(TMP_layer_genes)
+
+TMP_layer_genes_copy <- TMP_layer_genes
+TMP_layer_genes_copy$symbol <- toupper(TMP_layer_genes_copy$symbol)
+
+#keep just the TMP layer genes from the expression matrix of all genes
+CSDE1_IgG_expression_copy <- CSDE1_IgG_expression
+CSDE1_IgG_expression_copy$target_id <- toupper(CSDE1_IgG_expression_copy$target_id)
+
+CSDE1_IgG_expression_TMP_layer <-CSDE1_IgG_expression_copy[CSDE1_IgG_expression_copy$target_id %in% TMP_layer_genes_copy$symbol, ]
+
+#combine the original TMP_layer table with the TPM expression 
+merged_new <- merge(TMP_layer_genes_copy, CSDE1_IgG_expression_TMP_layer, by.x="symbol", by.y = "target_id", all = FALSE)
+
+write.csv(merged_new, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/results/TMP_layer_genes_TPM_merged_new.csv")
