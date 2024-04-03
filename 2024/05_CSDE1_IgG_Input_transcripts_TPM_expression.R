@@ -83,3 +83,34 @@ merge4 <- merge(merge3, t2g, by.x="target_id", by.y="target_id")
 
 ### save this result
 write.csv(merge4, "CSDE1_dataset_all_transcripts.csv")
+
+CSDE1_all_transcripts<-read.csv("results/CSDE1_dataset_all_transcripts.csv")
+
+#filter for just protein coding genes 
+CSDE1_protein_coding <-CSDE1_all_transcripts[CSDE1_all_transcripts$gene %in% protein_coding$gene_caps,]
+
+## save
+write.csv(CSDE1_protein_coding, "CSDE1_protein_coding_transcripts.csv")
+
+############## try merging the ENSEMBL transcript ID into the table:
+
+ENSEMBL_df <-read.csv("results/GRCm38_ENSEMBL_ID_Refseq_mRNA_ID_mart_export.txt")
+
+
+######## problem with merging the ENSEMBL transcript IDs is that the RefSeq IDs in the CSDE1 target_id column
+#include a decimal number at the end ie.NM_001001178.1, whereas the ENSEMBL Biomart table, the RefSeq mRNA IDs and
+# RefSeq mRNA predicted IDs do NOT contain a decimal at the end
+
+#### can try merging the ENSEMBL ids but likely won't work:
+test1 <- merge(ENSEMBL_df, CSDE1_all_transcripts, by.x = "RefSeq.mRNA.ID", by.y="target_id")
+#0 observations
+
+test2 <- merge(ENSEMBL_df, CSDE1_all_transcripts, by.x = "RefSeq.mRNA.predicted.ID", by.y="target_id")
+### 0 observations
+
+# It looks like it may not be possible to merge the ENSEMBL transcript IDS via the method of merging ENSEMBL Biomart table 
+# with the CSDE1 table, because in the CSDE1 table, the target_id/accession number ends in a decimal (ie. NM_001001178.1) but 
+# the RefSeq mRNA ID, and RefSeq mRNA predicted IDs from the ENSEMBL Biomart exported table DON't contain decimals at the end 
+# (ie. NM_001272030)
+
+### may need to re-do via Sleuth and use the ENSEMBL ID directly
