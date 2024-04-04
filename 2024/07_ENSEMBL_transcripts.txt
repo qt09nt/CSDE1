@@ -13,3 +13,4 @@ wget https://ftp.ensembl.org/pub/release-111/fasta/mus_musculus/cds/Mus_musculus
 ###### extract the fasta.gz file 
 gzip -d Mus_musculus.GRCm39.cds.all.fa.gz
 
+#http://pachterlab.github.io/kallisto/starting.html
