@@ -1,0 +1,15 @@
+############ GET TRANSCRIPTS version with ENSEMBL reference genome
+
+### re-do Kallisto alignment with GRCm39 CDS from https://ftp.ensembl.org/pub/release-111/fasta/mus_musculus/cds/Mus_musculus.GRCm39.cds.all.fa.gz
+
+### These files hold the coding sequences corresponding to ENSEMBL genes.
+### CDS does not contain UTR or intronic sequence.
+# cds sequences for all protein-coding transcripts
+
+# download mus_musculus GRCm39 CDS fasta into ARC
+cd /work/yang_lab/queenie/ENSEMBL_GRCm39_cds
+wget https://ftp.ensembl.org/pub/release-111/fasta/mus_musculus/cds/Mus_musculus.GRCm39.cds.all.fa.gz
+
+###### extract the fasta.gz file 
+gzip -d Mus_musculus.GRCm39.cds.all.fa.gz
+
