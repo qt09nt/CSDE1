@@ -10,14 +10,14 @@
 
 #ASSIGN TOOLS
 kallisto=/work/yang_lab/reza/tools/kallisto/kallisto
-input=/work/yang_lab/2_Raw_data_yanglab/220601_NB501138_0313_AHLM7LBGXL_Csde1-RIP/Data/*
+input=/work/yang_lab/2_Raw_data_yanglab/220601_NB501138_0313_AHLM7LBGXL_Csde1-RIP/Data/
 output=/work/yang_lab/queenie/csde1_RIP/kallisto_ENSEMBL/
 reference=/work/yang_lab/queenie/ENSEMBL_GRCm39_cds/Mus_musculus.GRCm39.cds.all.fa
 
 # Run
 i=0
 
-for FILE in $input*fastq 
+for FILE in $input
 do echo "trials starting for"
 echo $i
 echo "Accessing this file"
