@@ -14,3 +14,8 @@ wget https://ftp.ensembl.org/pub/release-111/fasta/mus_musculus/cds/Mus_musculus
 gzip -d Mus_musculus.GRCm39.cds.all.fa.gz
 
 #http://pachterlab.github.io/kallisto/starting.html
+
+# request an interactive node on ARC first before doing anything
+salloc --mem=10G --time 03:00:00 --partition=single
+
+#build an index type
