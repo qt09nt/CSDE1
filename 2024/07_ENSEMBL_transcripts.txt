@@ -19,3 +19,13 @@ gzip -d Mus_musculus.GRCm39.cds.all.fa.gz
 salloc --mem=10G --time 03:00:00 --partition=single
 
 #build an index type
+cd /work/yang_lab/queenie/kallisto
+/work/yang_lab/queenie/ENSEMBL_GRCm39_cds/Mus_musculus.GRCm39.cds.all.fa
+cd /work/yang_lab/queenie/kallisto
+./kallisto index -i Mus_musculus.GRCm39.cds.all.idx /work/yang_lab/queenie/ENSEMBL_GRCm39_cds/Mus_musculus.GRCm39.cds.all.fa
+
+#move this file up a folder to /work/yang_lab/queenie
+
+#make a symbolic link to the kallisto software program
+ln -s /work/yang_lab/queenie/kallisto/kallisto kallistoLink
+
