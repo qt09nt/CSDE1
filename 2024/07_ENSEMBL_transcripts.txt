@@ -29,3 +29,4 @@ cd /work/yang_lab/queenie/kallisto
 #make a symbolic link to the kallisto software program
 ln -s /work/yang_lab/queenie/kallisto/kallisto kallistoLink
 
+#run kallisto with ./kallistoLink
