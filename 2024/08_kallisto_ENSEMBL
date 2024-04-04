@@ -24,3 +24,9 @@ echo "Accessing this file"
 echo $FILE
 
 $kallisto quant -i $reference -o $output$i".kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $FILE
+
+echo "trial" $i "complete"
+((i++))
+echo "-------------"
+done
+done
