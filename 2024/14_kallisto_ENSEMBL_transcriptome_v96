@@ -9,7 +9,7 @@
 
 #ASSIGN TOOLS
 kallisto=/work/yang_lab/reza/tools/kallisto/kallisto
-input=/work/yang_lab/2_Raw_data_yanglab/220601_NB501138_0313_AHLM7LBGXL_Csde1-RIP/Data/
+input=/work/yang_lab/2_Raw_data_yanglab/220601_NB501138_0313_AHLM7LBGXL_Csde1-RIP/Data
 output=/work/yang_lab/queenie/csde1_RIP/kallisto_ENSEMBL_transcriptomes_v96/
 reference=/work/yang_lab/queenie/mus_musculus/transcriptome.idx
 
