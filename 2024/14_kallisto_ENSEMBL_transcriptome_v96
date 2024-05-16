@@ -1,0 +1,25 @@
+#!/bin/bash 
+
+#SBATCH -J CSDE1_kallisto_ENSEMBL_v96
+#SBATCH --mem=100G
+#SBATCH -N 1 
+#SBATCH -n 1 
+#SBATCH -t 05:00:00
+#SBATCH --cpus-per-task=40
+
+#ASSIGN TOOLS
+kallisto=/work/yang_lab/reza/tools/kallisto/kallisto
+input=/work/yang_lab/2_Raw_data_yanglab/220601_NB501138_0313_AHLM7LBGXL_Csde1-RIP/Data/
+output=/work/yang_lab/queenie/csde1_RIP/kallisto_ENSEMBL_transcriptomes_v96/
+reference=/work/yang_lab/queenie/mus_musculus/transcriptome.idx
+
+
+$kallisto quant -i $reference -o $output"IgG1.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputIgG1_Li35182_S4_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"IgG2.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputIgG2_Li35183_S5_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"IgG3.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputIgG3_Li35184_S6_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"Input2.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputInput2_Li35180_S2_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"Input_1.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputInput_1_Li35179_S1_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"Input_3.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputInput_3_Li35181_S3_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"csde1_1.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputcsde1_1_Li35185_S7_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"csde1_2.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputcsde1_2_Li35186_S8_R1_001.fastq.gz
+$kallisto quant -i $reference -o $output"csde1_3.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $inputcsde1_3_Li35187_S9_R1_001.fastq.gz
