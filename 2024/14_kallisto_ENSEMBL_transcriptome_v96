@@ -23,3 +23,8 @@ $kallisto quant -i $reference -o $output"csde1_1.kallisto" --single -l 181 -s 20
 $kallisto quant -i $reference -o $output"csde1_2.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $input/csde1_2_Li35186_S8_R1_001.fastq.gz
 $kallisto quant -i $reference -o $output"csde1_3.kallisto" --single -l 181 -s 20 --bias -b 100 -t 40 $input/csde1_3_Li35187_S9_R1_001.fastq.gz
 
+
+#### for downloading to local computer:
+#change to local directory in MobaXterm: C:\Users\queenie.tsang\Desktop\CSDE1\Csde1RNA_IP\kallisto_ENSEMBL_transciptomes_v96\kallisto_ENSEMBL_transcriptomes_v96
+## then to download the kallisto files from ARC to local computer:
+rsync -axv queenie.tsang@arc-dtn.ucalgary.ca:/work/yang_lab/queenie/csde1_RIP/kallisto_ENSEMBL_transcriptomes_v96 .
