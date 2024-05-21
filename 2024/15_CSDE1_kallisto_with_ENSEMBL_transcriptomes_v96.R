@@ -29,9 +29,20 @@ files<-file.path(samples$files)
 names(files) <-paste0(samples$sample)
 
 
+### import the kallisto files using tximport
+#https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html
+# The tximport package has a single function for importing transcript-level estimates. The type argument is used
+# to specify what software was used for estimation. A simple list with matrices, "abundance", "counts", and "length",
+# is returned, where the transcript level information is summarized to the gene-level. Typically, abundance is provided by the 
+# quantification tools as TPM (transcripts-per-million), while the counts are estimated counts (possibly fractional), and the "length"
+# matrix contains the effective gene lengths. The "length" matrix can be used to generate an offset matrix for downstream gene-level differential 
+# analysis of count matrices, as shown below.
+
+#the argument "ignoreAfterBar" is for facilitating the summarization to gene level
 txi.kallisto.tsv <- tximport(files, type="kallisto", tx2gene = tx2gene, ignoreAfterBar = TRUE)
 head(txi.kallisto.tsv$counts)
 
+write.csv(txi.kallisto.tsv$counts, "results/CSDE1_RIP_Kallisto_estimated_counts_tximport.csv")
 
 
 ####  https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#transcript-abundance-files-and-tximport-tximeta
@@ -86,7 +97,10 @@ head(txi.kallisto.tsv$counts, 2)
 # 
 # Here we perform pre-filtering to keep only rows that have a count of at least 10 for a minimal number of samples.
 # The count of 10 is a reasonable choice for bulk RNA-seq. A recommendation for the minimal number of samples is to
-# specify the smallest group size, e.g. here there are 3 treated samples. If there are not discrete groups, one can 
+# specify the smallest group size, e.g. here there are 3 treated samples in the example.
+#For the CSDE1 RIP dataset, each condition group also has 3 samples.
+
+#If there are not discrete groups, one can 
 # use the minimal number of samples where non-zero counts would be considered interesting. One can also omit this step
 # entirely and just rely on the independent filtering procedures available in results(), either IHW or genefilter. See 
 # independent filtering section.
@@ -95,9 +109,6 @@ head(txi.kallisto.tsv$counts, 2)
 smallestGroupSize <- 3
 keep <- rowSums(counts(dds) >= 10) >= smallestGroupSize
 dds <- dds[keep,]
-
-
-
 
 
 ######## use Contrasts for pairwise comparisons
@@ -117,7 +128,7 @@ dds <- dds[keep,]
 #be found below.
 
 
-#### on the factor levels 
+#### Note on the factor levels 
 #you can either explicitly tell results which comparison to make using the contrast argument (this will be shown later), 
 #or you can explicitly set the factors levels. In order to see the change of reference levels reflected in the results names, 
 #you need to either run DESeq or nbinomWaldTest/nbinomLRT after the re-leveling operation. Setting the factor levels can
@@ -129,8 +140,6 @@ dds$condition <- relevel(dds$condition, ref = "IgG")
 dds$condition 
 # [1] Capture Capture Capture IgG     IgG     IgG     Csde    Csde    Csde   
 # Levels: IgG Capture Csde
-
-dds <- DESeq(dds)
 
 # Differential expression analysis
 # 
@@ -148,11 +157,63 @@ dds <- DESeq(dds)
 # Details about the comparison are printed to the console, directly above the results table. The text, condition treated 
 #vs untreated, tells you that the estimates are of the logarithmic fold change log2(treated/untreated).
 
+## from the ?results help page:
+# contrast	
+# this argument specifies what comparison to extract from the object to build a results table. one of either:
+#   
+#   a character vector with exactly three elements: the name of a factor in the design formula, 
+#the name of the numerator level for the fold change, and the name of the denominator level for the fold change (simplest case)
+# 
+# a list of 2 character vectors: the names of the fold changes for the numerator, and the names of the fold changes for the 
+#denominator. these names should be elements of resultsNames(object). if the list is length 1, a second element is added which 
+#is the empty character vector, character(). (more general case, can be to combine interaction terms and main effects)
+# 
+# a numeric contrast vector with one element for each element in resultsNames(object) (most general case)
+# 
+# If specified, the name argument is ignored.
+
+
+dds <- DESeq(dds)
+
 CSDE1_vs_IgG <-results(dds, contrast=c("condition","Csde","IgG"))
 CSDE1_vs_IgG
 
+# log2 fold change (MLE): condition Csde vs IgG 
+# Wald test p-value: condition Csde vs IgG 
+# DataFrame with 18393 rows and 6 columns
+#                       baseMean log2FoldChange     lfcSE      stat      pvalue        padj
+#                         <numeric>      <numeric> <numeric> <numeric>   <numeric>   <numeric>
+# ENSMUSG00000000001.4  1055.7763       0.076160  0.240978  0.316046 7.51968e-01 8.26691e-01
+# ENSMUSG00000000028.15  166.8900      -1.689625  0.383374 -4.407246 1.04693e-05 5.60035e-05
+# ENSMUSG00000000037.16  123.9243      -0.697021  0.490326 -1.421548 1.55157e-01 2.49111e-01
+# ENSMUSG00000000056.7  1634.8435       0.185037  0.196678  0.940814 3.46800e-01 4.65087e-01
+# ENSMUSG00000000058.6    87.3251      -0.910550  0.497998 -1.828421 6.74864e-02 1.27359e-01
+# ...                         ...            ...       ...       ...         ...         ...
+# ENSMUSG00000118332.1   602.0909       0.440730  0.295026  1.493870    0.135210  0.22336342
+# ENSMUSG00000118345.1    13.4581      -0.676406  0.935306 -0.723192    0.469562  0.58545958
+# ENSMUSG00000118346.1   133.3456      -0.803971  0.576016 -1.395745    0.162791  0.25894063
+# ENSMUSG00000118353.1    68.3191       2.991575  0.985474  3.035673    0.002400  0.00740811
+# ENSMUSG00000118382.1    11.3976      -1.133974  1.213126 -0.934754    0.349915  0.46816062
+
 write.csv(CSDE1_vs_IgG, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_vs_IgG_DESEQ2.csv")
 
+#get the dataframe for CSDE1 vs IgG comparison
+CSDE1_vs_IgG_df <- data.frame(CSDE1_vs_IgG)
+CSDE1_vs_IgG_df$gene_ID <- row.names(CSDE1_vs_IgG_df)
+
+#keep just the Gene ID and Gene Name columns from the tx2gene file
+tx2gene_keep <-tx2gene[,c("GENE_ID", "GENE_NAME")]
+#remove duplicate rows
+tx2gene_keep <- unique(tx2gene_keep)
+
+## add the gene name /symbol from tx2 gene file
+CSDE1_vs_IgG_merged <- merge(CSDE1_vs_IgG_df, tx2gene_keep, by.x="gene_ID", by.y="GENE_ID")
+
+#keep the CSDE1_vs_IgG_merged columns 
+colnames(CSDE1_vs_IgG_merged)
+
+CSDE1_vs_IGG_keep <- CSDE1_vs_IgG_merged[,c("gene_ID", "log2FoldChange", "pvalue", "padj", "GENE_NAME")]
+colnames(CSDE1_vs_IGG_keep)<-c("gene_ID", "CSDE1_vs_IgG_log2FoldChange", "CSDE1_vs_IgG_pvalue", "CSDE1_vs_IgG_padj", "GENE_NAME")
 
 #### for the next comparison of CSDE1 vs Input
 ### specify the reference level, for the first comparison, set IgG as the reference: 
@@ -164,9 +225,6 @@ dds$condition
 
 dds <- DESeq(dds)
 CSDE1_vs_Capture <- results(dds, contrast = c("condition", "Csde", "Capture"))
-
-
-CSDE1_vs_Capture
 
 # log2 fold change (MLE): condition Csde vs Capture 
 # Wald test p-value: condition Csde vs Capture 
@@ -187,3 +245,86 @@ CSDE1_vs_Capture
 
 #### save the results:
 write.csv(CSDE1_vs_Capture, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_vs_Capture.csv")
+
+
+#####
+CSDE1_vs_Capture
+
+
+CSDE1_vs_Capture_df <- data.frame(CSDE1_vs_Capture)
+CSDE1_vs_Capture_df$gene_ID <- row.names(CSDE1_vs_Capture_df)
+
+#merge the text2gene file to add the gene names to this dataframe
+CSDE1_Capture_df_merged <- merge(CSDE1_vs_Capture_df, tx2gene_keep, by.x = "gene_ID", by.y="GENE_ID")
+colnames(CSDE1_Capture_df_merged)
+
+#keep just the columns for Log2FC
+CSDE1_Capture_df_merged_keep <- CSDE1_Capture_df_merged[,c("gene_ID", "log2FoldChange", "pvalue", "padj", "GENE_NAME")]
+
+#rename the column names for CSDE1 vs Capture dataframe:
+colnames(CSDE1_Capture_df_merged_keep) <- c("gene_ID", "CSDE1_vs_Capture_log2FoldChange", "CSDE1_vs_Capture_pvalue", "CSDE1_vs_Capture_padj", "GENE_NAME")
+
+#### merge the CSDE1 vs IgG and the CSDE1 vs Capture dataframes together
+CSDE1_dataframe <- merge(CSDE1_vs_IGG_keep, CSDE1_Capture_df_merged_keep, by.x="gene_ID", by.y="gene_ID")
+colnames(CSDE1_dataframe)
+
+#keep just the GENE ID, "CSDE1_vs_IgG_log2FoldChange", "CSDE1_vs_IgG_pvalue", "CSDE1_vs_IgG_padj", "GENE_NAME.x", "CSDE1_vs_Capture_log2FoldChange","CSDE1_vs_Capture_pvalue", "CSDE1_vs_Capture_padj", "GENE_NAME.y"                    
+CSDE1_dataframe_keep <- CSDE1_dataframe[,c("gene_ID", "CSDE1_vs_IgG_log2FoldChange", "CSDE1_vs_IgG_pvalue", "CSDE1_vs_IgG_padj", "CSDE1_vs_Capture_log2FoldChange", "CSDE1_vs_Capture_pvalue", "CSDE1_vs_Capture_padj", "GENE_NAME.y")]
+
+colnames(CSDE1_dataframe_keep)[8] <- "GENE_NAME"
+
+write.csv(CSDE1_dataframe_keep, "results/CSDE1_dataframe_keep.csv")
+
+
+
+
+### Log fold change shrinkage for visualization and ranking
+# Shrinkage of effect size (LFC estimates) is useful for visualization and ranking of genes. To shrink the LFC, we pass the dds object to the function
+# lfcShrink. Below we specify to use the apeglm method for effect size shrinkage (Zhu, Ibrahim, and Love 2018), which improves on the previous estimator.
+# 
+# We provide the dds object and the name or number of the coefficient we want to shrink, where the number refers to the order of the coefficient as
+# it appears in resultsNames(dds).
+resultsNames(dds)
+# "Intercept"                 "condition_IgG_vs_Capture"  "condition_Csde_vs_Capture"
+
+resLFC_CSDE1_vs_Capture <- lfcShrink(dds, coef="condition_Csde_vs_Capture", type="apeglm")
+resLFC_CSDE1_vs_Capture
+
+# log2 fold change (MAP): condition Csde vs Capture 
+# Wald test p-value: condition Csde vs Capture 
+# DataFrame with 18393 rows and 5 columns
+#                         baseMean log2FoldChange     lfcSE      pvalue        padj
+#                         <numeric>      <numeric> <numeric>   <numeric>   <numeric>
+# ENSMUSG00000000001.4  1055.7763      -0.281810  0.227920 1.88663e-01 2.95959e-01
+# ENSMUSG00000000028.15  166.8900      -1.515799  0.382639 1.18597e-05 6.47252e-05
+# ENSMUSG00000000037.16  123.9243      -1.752110  0.491741 3.98913e-05 1.96213e-04
+# ENSMUSG00000000056.7  1634.8435       0.329275  0.189578 7.18022e-02 1.37498e-01
+# ENSMUSG00000000058.6    87.3251      -0.790380  0.473125 3.48570e-02 7.61437e-02
+# ...                         ...            ...       ...         ...         ...
+# ENSMUSG00000118332.1   602.0909      1.2762428  0.294984 3.43748e-06 2.07045e-05
+# ENSMUSG00000118345.1    13.4581     -0.0497702  0.553895 8.82189e-01 9.19024e-01
+# ENSMUSG00000118346.1   133.3456     -0.5739599  0.512250 1.30738e-01 2.20855e-01
+# ENSMUSG00000118353.1    68.3191     -0.2173907  0.580614 5.26445e-01 6.38923e-01
+# ENSMUSG00000118382.1    11.3976     -0.5240065  0.803744 1.42946e-01 2.37659e-01
+
+### p values and adjusted p-values
+#order the results by the smallest p value:
+resOrdered_CSDE1_vs_Capture <- CSDE1_vs_Capture[order(CSDE1_vs_Capture$pvalue),]
+
+summary(CSDE1_vs_Capture)
+
+#How many adjusted p-values were less than 0.05?
+sum(CSDE1_vs_Capture$padj < 0.05, na.rm=TRUE)
+#7729
+
+### exploring results:
+
+##MA plot
+# In DESeq2, the function plotMA shows the log2 fold changes attributable to a given variable over the mean of normalized counts 
+# for all the samples in the DESeqDataSet. Points will be colored blue if the adjusted p value is less than 0.1. Points which fall
+# out of the window are plotted as open triangles pointing either up or down.
+plotMA(CSDE1_vs_Capture, ylim=c(-2,2))
+
+#It is more useful to visualize the MA-plot for the shrunken log2 fold changes, which remove the noise associated with log2 fold changes from 
+#low count genes without requiring arbitrary filtering thresholds.
+plotMA(resLFC_CSDE1_vs_Capture, ylim=c(-2,2))
