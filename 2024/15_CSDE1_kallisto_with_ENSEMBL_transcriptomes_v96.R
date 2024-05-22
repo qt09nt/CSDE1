@@ -276,6 +276,21 @@ colnames(CSDE1_dataframe_keep)[8] <- "GENE_NAME"
 write.csv(CSDE1_dataframe_keep, "results/CSDE1_dataframe_keep.csv")
 
 
+#### filter for protein coding genes only
+setwd("C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/")
+
+protein_coding_genes <- read.csv("protein_coding_genes_biomart_ensembl.txt")
+
+CSDE1_dataframe_keep$GENE_NAME <- toupper(CSDE1_dataframe_keep$GENE_NAME)
+
+#convert the protein coding genes to capital letters to better use as a filter for the CSDE1 dataframe
+protein_coding_genes$protein_caps <- toupper(protein_coding_genes$Gene.name)
+
+#####filter for just the protein coding genes in the CSDE1 dataframe
+CSDE1_protein_coding_genes <- CSDE1_dataframe_keep[CSDE1_dataframe_keep$GENE_NAME %in% protein_coding_genes$protein_caps, ]
+
+###### save the results 
+write.csv(CSDE1_protein_coding_genes, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_protein_coding_genes.csv")
 
 
 ### Log fold change shrinkage for visualization and ranking
