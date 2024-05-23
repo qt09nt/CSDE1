@@ -1,0 +1,10 @@
+state	sample	kallisto files 
+Capture	Input1	Input_1.kallisto
+Capture	Input2	Input2.kallisto
+Capture	Input3	Input_3.kallisto
+IgG	IgG1	IgG1.kallisto
+IgG	IgG2	IgG2.kallisto
+IgG	IgG3	IgG3.kallisto
+Csde	Csde1_1	csde1_1.kallisto
+Csde	Csde1_2	csde1_2.kallisto
+Csde	Csde1_3	csde1_3.kallisto
