@@ -196,3 +196,9 @@ dim(CSDE1_protein_coding_genes_ENSEMBL_merged_keep)
 
 ## save this table for CSDE1 protein coding genes 
 write.csv(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_protein_coding_genes_ENSEMBL_longest_cds_transcript_5UTR_3UTR.csv")
+
+## check for duplicated genes:
+duplicated_genes <- CSDE1_protein_coding_genes_ENSEMBL_merged_keep2[duplicated(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2$GENE_NAME),]
+
+### check for duplicated genes within the CSDE1 protein coding genes dataframe 
+CSDE1_genes_duplicated<-CSDE1_protein_coding_genes[duplicated(CSDE1_protein_coding_genes$GENE_NAME),]
