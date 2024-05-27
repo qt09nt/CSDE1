@@ -168,6 +168,67 @@ ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2$cds_length <-  gsub("^(
 ### save the results
 write.csv(ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_5UTR_3UTR_length.csv")
 
+###### read in the ENSEMBL_GRCm38.p6_longest_cds_length_genes 
+ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds <- read.csv("C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_5UTR_3UTR_length.csv")
+
+### check for NA values in ENSEMBL GRCm38.p6 longest cds table:
+colSums(is.na(ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds))
+#0
+
+colSums(is.na(CSDE1_protein_coding_genes))
+# X                         gene_ID     CSDE1_vs_IgG_log2FoldChange             CSDE1_vs_IgG_pvalue 
+# 0                               0                               0                              29 
+# CSDE1_vs_IgG_padj CSDE1_vs_Capture_log2FoldChange         CSDE1_vs_Capture_pvalue           CSDE1_vs_Capture_padj 
+# 29                               0                              29                              29 
+# GENE_NAME 
+# 0 
+
+#originally there are 15172 genes/ rows in the CSDE1 protein coding genes table
+
+#remove the genes with NA values 
+CSDE1_protein_coding_genes <- na.omit(CSDE1_protein_coding_genes)
+#now there's 15143 genes after removing NA values
+
+### check for duplicated genes within the CSDE1 protein coding genes dataframe 
+CSDE1_genes_duplicated<-CSDE1_protein_coding_genes[duplicated(CSDE1_protein_coding_genes$GENE_NAME),]
+#13 genes duplicated
+# for the genes which are duplicated, where there are 2 unique ENSEMBL gene IDs, double check which ENSEMBL Gene ID  corresponds with the longest 
+#transcript with/longest CDS length in the ENSEMBL_GRCm38.p6_genes table, and remove the other duplicate gene row with the ENSEMBL ID that does NOT
+# correspond with longest CDS length
+
+# CSDE1_genes_duplicated$GENE_NAME
+#"ST6GALNAC2" "ZKSCAN7"    "ALDOA"      "NDOR1"      "HGS"        "SEPT2"      "NNT"        "ZC3H11A"    "GCAT"       "MYL12B"     "HDHD2"     
+#"GGNBP1"     "SSSCA1"
+
+
+### for example:
+#GCAT has ENSEMBL IDs ENSMUSG00000006378.15 and ENSMUSG00000116378.1 in the CSDE1_protein_coding_genes table but the longest CDS length of 
+#1251 corresponds to the ENSEMBL Gene ID ENSMUSG00000006378 in the ENSEMBL_GRCm39.p6_protein_coding table
+
+#so remove the duplicated row Gene ID row = ENSMUSG00000116378.1 for GCAT 
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes[!CSDE1_protein_coding_genes$gene_ID == "ENSMUSG00000116378.1", ]
+
+# for ST6GALNAC2 duplicated gene, remove ENSMUSG00000110170
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000110170.1", ]
+
+#for ZKSCAN7, remove ENSMUSG00000111063.1
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000111063.1", ]
+
+## for ALDOA, remove ENSMUSG00000114515
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000114515.2",]
+
+#for NDOR1, remove ENSMUSG00000006471.18
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000006471.18",]
+
+
+
+
+
+
+
+
+
+
 
 #### merge the CSDE1 protein coding genes table with the ENSEMBL GRCm38.p6 protein coding table
 ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2$external_gene_name <- toupper(ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2$external_gene_name)
@@ -200,5 +261,3 @@ write.csv(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2, "C:/Users/queenie.tsa
 ## check for duplicated genes:
 duplicated_genes <- CSDE1_protein_coding_genes_ENSEMBL_merged_keep2[duplicated(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2$GENE_NAME),]
 
-### check for duplicated genes within the CSDE1 protein coding genes dataframe 
-CSDE1_genes_duplicated<-CSDE1_protein_coding_genes[duplicated(CSDE1_protein_coding_genes$GENE_NAME),]
