@@ -293,53 +293,148 @@ CSDE1_protein_coding_genes <- CSDE1_dataframe_keep[CSDE1_dataframe_keep$GENE_NAM
 write.csv(CSDE1_protein_coding_genes, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_protein_coding_genes.csv")
 
 
-### Log fold change shrinkage for visualization and ranking
-# Shrinkage of effect size (LFC estimates) is useful for visualization and ranking of genes. To shrink the LFC, we pass the dds object to the function
-# lfcShrink. Below we specify to use the apeglm method for effect size shrinkage (Zhu, Ibrahim, and Love 2018), which improves on the previous estimator.
-# 
-# We provide the dds object and the name or number of the coefficient we want to shrink, where the number refers to the order of the coefficient as
-# it appears in resultsNames(dds).
+
+
+# do the quality control steps from DESEQ2 on the CSDE1 vs IgG results after re-running the lines 176 - 179
+CSDE1_vs_IgG
+
 resultsNames(dds)
-# "Intercept"                 "condition_IgG_vs_Capture"  "condition_Csde_vs_Capture"
 
-resLFC_CSDE1_vs_Capture <- lfcShrink(dds, coef="condition_Csde_vs_Capture", type="apeglm")
-resLFC_CSDE1_vs_Capture
+res_CSDE1_vs_IgG <- results(dds, name="condition_Csde_vs_IgG")
 
-# log2 fold change (MAP): condition Csde vs Capture 
-# Wald test p-value: condition Csde vs Capture 
+#######  Log fold change shrinkage for visualization and ranking
+#Shrinkage of effect size (LFC estimates) is useful for visualization and ranking of genes. To shrink the LFC,
+#we pass the dds object to the function lfcShrink. Below we specify to use the apeglm method for effect size shrinkage 
+#(Zhu, Ibrahim, and Love 2018), which improves on the previous estimator.
+
+#We provide the dds object and the name or number of the coefficient we want to shrink, where the number refers to 
+#the order of the coefficient as it appears in resultsNames(dds)
+resultsNames(dds)
+#"Intercept"                "condition_Capture_vs_IgG" "condition_Csde_vs_IgG"
+
+res_CSDE1_vs_IgG_LFC <- lfcShrink(dds, coef="condition_Csde_vs_IgG", type="apeglm")
+res_CSDE1_vs_IgG_LFC
+# log2 fold change (MAP): condition Csde vs IgG 
+# Wald test p-value: condition Csde vs IgG 
 # DataFrame with 18393 rows and 5 columns
-#                         baseMean log2FoldChange     lfcSE      pvalue        padj
-#                         <numeric>      <numeric> <numeric>   <numeric>   <numeric>
-# ENSMUSG00000000001.4  1055.7763      -0.281810  0.227920 1.88663e-01 2.95959e-01
-# ENSMUSG00000000028.15  166.8900      -1.515799  0.382639 1.18597e-05 6.47252e-05
-# ENSMUSG00000000037.16  123.9243      -1.752110  0.491741 3.98913e-05 1.96213e-04
-# ENSMUSG00000000056.7  1634.8435       0.329275  0.189578 7.18022e-02 1.37498e-01
-# ENSMUSG00000000058.6    87.3251      -0.790380  0.473125 3.48570e-02 7.61437e-02
+#                       baseMean log2FoldChange     lfcSE      pvalue        padj
+#                       <numeric>      <numeric> <numeric>   <numeric>   <numeric>
+# ENSMUSG00000000001.4  1055.7763      0.0709297  0.231819 7.51968e-01 8.25552e-01
+# ENSMUSG00000000028.15  166.8900     -1.5704115  0.386956 1.04693e-05 5.60035e-05
+# ENSMUSG00000000037.16  123.9243     -0.5406539  0.452560 1.55157e-01 2.49111e-01
+# ENSMUSG00000000056.7  1634.8435      0.1760394  0.191789 3.46800e-01 4.65087e-01
+# ENSMUSG00000000058.6    87.3251     -0.7218866  0.471977 6.74864e-02 1.27359e-01
 # ...                         ...            ...       ...         ...         ...
-# ENSMUSG00000118332.1   602.0909      1.2762428  0.294984 3.43748e-06 2.07045e-05
-# ENSMUSG00000118345.1    13.4581     -0.0497702  0.553895 8.82189e-01 9.19024e-01
-# ENSMUSG00000118346.1   133.3456     -0.5739599  0.512250 1.30738e-01 2.20855e-01
-# ENSMUSG00000118353.1    68.3191     -0.2173907  0.580614 5.26445e-01 6.38923e-01
-# ENSMUSG00000118382.1    11.3976     -0.5240065  0.803744 1.42946e-01 2.37659e-01
+# ENSMUSG00000118332.1   602.0909       0.397511  0.282525    0.135210  0.22336342
+# ENSMUSG00000118345.1    13.4581      -0.309754  0.658572    0.469562  0.58541976
+# ENSMUSG00000118346.1   133.3456      -0.578718  0.520113    0.162791  0.25894063
+# ENSMUSG00000118353.1    68.3191       2.291993  1.119089    0.002400  0.00740811
+# ENSMUSG00000118382.1    11.3976      -0.383408  0.767422    0.349915  0.46816062
 
-### p values and adjusted p-values
-#order the results by the smallest p value:
-resOrdered_CSDE1_vs_Capture <- CSDE1_vs_Capture[order(CSDE1_vs_Capture$pvalue),]
 
-summary(CSDE1_vs_Capture)
+############ pvalues and adjusted pvalues
+##order the results table by the smallest pvalue:
 
-#How many adjusted p-values were less than 0.05?
-sum(CSDE1_vs_Capture$padj < 0.05, na.rm=TRUE)
-#7729
+resOrdered_CSDE1_vs_IgG <- res_CSDE1_vs_IgG[order(res_CSDE1_vs_IgG$pvalue),]
 
-### exploring results:
+summary(resOrdered_CSDE1_vs_IgG)
+# out of 18393 with nonzero total read count
+# adjusted p-value < 0.1
+# LFC > 0 (up)       : 4445, 24%
+# LFC < 0 (down)     : 4713, 26%
+# outliers [1]       : 61, 0.33%
+# low counts [2]     : 0, 0%
+# (mean count < 2)
+# [1] see 'cooksCutoff' argument of ?results
+# [2] see 'independentFiltering' argument of ?results
 
-##MA plot
-# In DESeq2, the function plotMA shows the log2 fold changes attributable to a given variable over the mean of normalized counts 
-# for all the samples in the DESeqDataSet. Points will be colored blue if the adjusted p value is less than 0.1. Points which fall
-# out of the window are plotted as open triangles pointing either up or down.
-plotMA(CSDE1_vs_Capture, ylim=c(-2,2))
+## how many adjusted pvalues less than 0.05?
+sum(CSDE1_vs_IgG$padj < 0.05, na.rm = TRUE)
+#8065
 
-#It is more useful to visualize the MA-plot for the shrunken log2 fold changes, which remove the noise associated with log2 fold changes from 
-#low count genes without requiring arbitrary filtering thresholds.
-plotMA(resLFC_CSDE1_vs_Capture, ylim=c(-2,2))
+
+### Exploring and exporting results
+### MA plot
+
+#In DESeq2, the function plotMA shows the log2 fold changes attributable to a given variable over the mean of normalized 
+#counts for all the samples in the DESeqDataSet. Points will be colored blue if the adjusted p value is less than 0.1.
+#Points which fall out of the window are plotted as open triangles pointing either up or down.
+
+plotMA(res_CSDE1_vs_IgG, ylim = c(-2,2))
+
+# view the MA plot for the shrunken log2 fold changes, which remove the noise associated with log2 fold changes from low
+#count genes without requiring arbitrary filtering thresholds.
+plotMA(res_CSDE1_vs_IgG_LFC, ylim=c(-2,2))
+
+###After calling plotMA, one can use the function identify to interactively detect the row number of individual genes by clicking on the plot. 
+#One can then recover the gene identifiers by saving the resulting indices:
+idx <- identify(res_CSDE1_vs_IgG$baseMean, res_CSDE1_vs_IgG$log2FoldChange)
+rownames(res_CSDE1_vs_IgG)[idx]
+
+# Alternative shrinkage estimators
+# 
+# The moderated log fold changes proposed by Love, Huber, and Anders (2014) use a normal prior distribution, centered on zero and with a scale that is fit to the data. The shrunken log fold changes are useful for ranking and visualization, without the need for arbitrary filters on low count genes. The normal prior can sometimes produce too strong of shrinkage for certain datasets. In DESeq2 version 1.18, we include two additional adaptive shrinkage estimators, available via the type argument of lfcShrink. For more details, see ?lfcShrink
+# 
+# The options for type are:
+#   
+# apeglm is the adaptive t prior shrinkage estimator from the apeglm package (Zhu, Ibrahim, and Love 2018). As of version 1.28.0, it is the default estimator.
+# ashr is the adaptive shrinkage estimator from the ashr package (Stephens 2016). Here DESeq2 uses the ashr option to fit a mixture of Normal distributions to form the prior, with method="shrinkage".
+# normal is the the original DESeq2 shrinkage estimator, an adaptive Normal distribution as prior.
+
+resultsNames(dds)
+#"Intercept"                "condition_Capture_vs_IgG" "condition_Csde_vs_IgG" 
+
+resNorm_CSDE1_IgG <- lfcShrink(dds, coef="condition_Csde_vs_IgG", type="normal")
+resAsh_CSDE1_IgG <- lfcShrink(dds, coef="condition_Csde_vs_IgG", type="ashr")
+# Error in lfcShrink(dds, coef = "condition_Csde_vs_IgG", type = "ashr") : 
+#   type='ashr' requires installing the CRAN package 'ashr
+
+resApeGLM_CSDE1_IgG <- lfcShrink(dds, coef="condition_Csde_vs_IgG", type="apeglm")
+
+xlim <- c(1,1e5); ylim <- c(-3,3)
+plotMA(resNorm_CSDE1_IgG, xlim=xlim, ylim=ylim, main="normal")
+plotMA(resApeGLM_CSDE1_IgG, xlim=xlim, ylim=ylim, main="apeglm")
+
+## Plot counts 
+# It can also be useful to examine the counts of reads for a single gene across the groups. A simple function 
+# for making this plot is plotCounts, which normalizes counts by the estimated size factors (or normalization 
+# factors if these were used) and adds a pseudocount of 1/2 to allow for log scale plotting. The counts are 
+# grouped by the variables in intgroup, where more than one variable can be specified. Here we specify the gene
+# which had the smallest p value from the results table created above. You can select the gene to plot by rowname
+# or by numeric index.
+plotCounts(dds, gene=which.min(res_CSDE1_vs_IgG$padj), intgroup="condition")
+
+#For customized plotting, an argument returnData specifies that the function should only return a data.frame 
+#for plotting with ggplot.
+d <- plotCounts(dds, gene=which.min(res_CSDE1_vs_IgG$padj), intgroup="condition", 
+                returnData=TRUE)
+library("ggplot2")
+ggplot(d, aes(x=condition, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  scale_y_log10(breaks=c(25,100,400))
+
+mcols(res_CSDE1_vs_IgG)$description
+# "mean of normalized counts for all samples"     "log2 fold change (MLE): condition Csde vs IgG"
+# "standard error: condition Csde vs IgG"         "Wald statistic: condition Csde vs IgG"        
+# "Wald test p-value: condition Csde vs IgG"      "BH adjusted p-values"    
+
+
+##### Effects of transformations on the variance
+ ntd <- normTransform(dds)
+library("vsn") 
+
+install.packages("vsn")
+
+meanSdPlot(assay(ntd)) 
+ 
+meanSdPlot(assay(vsd))
+meanSdPlot(assay(rld))
+
+#Data Quality Assessment by sample clustering and visualization
+# Data quality assessment and quality control (i.e. the removal of insufficiently good data) are essential steps of any data analysis. These steps should typically be performed very early in the analysis of a new data set, preceding or in parallel to the differential expression testing.
+# 
+# We define the term quality as fitness for purpose. Our purpose is the detection of differentially expressed genes, and we are looking in particular for samples whose experimental treatment suffered from an anormality that renders the data points obtained from these particular samples detrimental to our purpose.
+# Heatmap of the count matrix
+# 
+# To explore a count matrix, it is often instructive to look at it as a heatmap. Below we show how to produce such a heatmap for various transformations of the data.
+
