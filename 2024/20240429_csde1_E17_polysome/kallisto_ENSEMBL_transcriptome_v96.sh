@@ -33,3 +33,6 @@ $kallisto quant -i $reference -o $output"Csde1-Het4-mono_S17.kallisto" --single 
 $kallisto quant -i $reference -o $output"Csde1-Het4-poly_S18.kallisto" --single -l 76 -s 20 --bias -b 100 -t 40 $input/Li47807-Csde1-Het4-poly_S18_R1_001.fastq.gz
 $kallisto quant -i $reference -o $output"CHGI-NTC_S19.kallisto" --single -l 76 -s 20 --bias -b 100 -t 40 $input/Li47808-CHGI-NTC_S19_R1_001.fastq.gz
 $kallisto quant -i $reference -o $output"Undetermined_S0.kallisto" --single -l 76 -s 20 --bias -b 100 -t 40 $input/Undetermined_S0_R1_001.fastq.gz
+
+### copy the kallisto directory to the shared directory to share with Ankita
+cp /work/yang_lab/queenie/csde1_E17_polysome_20240429/kallisto /work/yang_lab/share/CSDE1_E17_polysomeseq_20240429/
