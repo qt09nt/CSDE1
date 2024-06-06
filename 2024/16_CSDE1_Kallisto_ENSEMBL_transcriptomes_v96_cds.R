@@ -221,43 +221,35 @@ CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_pr
 CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000006471.18",]
 
 
+#for HGS, remove ENSMUSG00000116045.1
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000116045.1",]
+
+#for NNT, both ENSMUSG00000025453 and ENSMUSG00000116207 have the same longest CDS length
+
+#for ZC3H11A, both ENSMUSG00000116275 and ENSMUSG00000102976 have the same longest CDS length
 
 
+#for MYL12B, remove ENSMUSG00000117098.1
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000117098.1",]
+
+## for HDHD2, remove ENSMUSG00000117732.1
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000117732.1",]
 
 
-
-
-
-
+## for GGNBP1, remove ENSMUSG00000117819.1
+CSDE1_protein_coding_genes_no_dup <- CSDE1_protein_coding_genes_no_dup[!CSDE1_protein_coding_genes_no_dup$gene_ID == "ENSMUSG00000117819.1",]
 
 #### merge the CSDE1 protein coding genes table with the ENSEMBL GRCm38.p6 protein coding table
-ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2$external_gene_name <- toupper(ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2$external_gene_name)
-
-CSDE1_protein_coding_genes_ENSEMBL_merged<-merge(CSDE1_protein_coding_genes, ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds_keep2, by.x="GENE_NAME", by.y="external_gene_name")
-
-colnames(CSDE1_protein_coding_genes_ENSEMBL_merged)
-
-## keep columns 
-CSDE1_protein_coding_genes_ENSEMBL_merged_keep <- CSDE1_protein_coding_genes_ENSEMBL_merged[,c("GENE_NAME", "gene_ID", "CSDE1_vs_IgG_log2FoldChange", "CSDE1_vs_IgG_pvalue", 
-                                                                                                    "CSDE1_vs_IgG_padj",  "CSDE1_vs_Capture_log2FoldChange", "CSDE1_vs_Capture_pvalue",
-                                                                                                    "CSDE1_vs_Capture_padj", "ensembl_transcript_id", "cds_length", 
-                                                                                                    "X5_utr_length", "X3_utr_length")]
-#count the number of NA rows in the data frame
-colSums(is.na(CSDE1_protein_coding_genes_ENSEMBL_merged_keep))
-#there are 28 genes which are missing CSDE1_vs_IgG_pvalue, CSDE1_vs_IgG_padj, CSDE1_vs_Capture_pvalue, and  CSDE1_vs_Capture_padj
+CSDE1_protein_coding_genes_no_dup$gene_ID_no_version <- CSDE1_protein_coding_genes_no_dup$gene_ID
+CSDE1_protein_coding_genes_no_dup$gene_ID_no_version <- gsub("\\..*","", CSDE1_protein_coding_genes_no_dup$gene_ID_no_version)
+#15134 genes in total
 
 
-## remove the genes that have NA for the CSDE1 vs IGG, and CSDE1 vs Capture columns
-CSDE1_protein_coding_genes_ENSEMBL_merged_keep2 <- na.omit(CSDE1_protein_coding_genes_ENSEMBL_merged_keep)
-dim(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2)
-#15104    12
+merged <-merge(CSDE1_protein_coding_genes_no_dup, ENSEMBL_GRCm38.p6_protein_coding_genes_longest_cds, by.x="gene_ID_no_version", by.y="ensembl_gene_id")
+#14887 in total 
 
-dim(CSDE1_protein_coding_genes_ENSEMBL_merged_keep)
-#15132    12
+##### rearrange the order of the columns
+merged_CSDE1_reordered <- merged[,c("gene_ID", "GENE_NAME",  "ensembl_transcript_id", "CSDE1_vs_IgG_log2FoldChange", "CSDE1_vs_IgG_pvalue", "CSDE1_vs_IgG_padj",  "CSDE1_vs_Capture_log2FoldChange", "CSDE1_vs_Capture_pvalue",        
+          "CSDE1_vs_Capture_padj", "cds_length","X5_utr_length","X3_utr_length")]
 
-## save this table for CSDE1 protein coding genes 
-write.csv(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_protein_coding_genes_ENSEMBL_longest_cds_transcript_5UTR_3UTR.csv")
-
-## check for duplicated genes:
-duplicated_genes <- CSDE1_protein_coding_genes_ENSEMBL_merged_keep2[duplicated(CSDE1_protein_coding_genes_ENSEMBL_merged_keep2$GENE_NAME),]
-
+write.csv(merged_CSDE1_reordered, "C:/Users/queenie.tsang/Desktop/CSDE1/Csde1RNA_IP/kallisto_ENSEMBL_transciptomes_v96/results/CSDE1_genes_DESEQ2_merged_with_longest_CDS_length.csv")
