@@ -477,6 +477,52 @@ celf2_csde1_scatterplot3<- function(merged_table){
   plot(p)
 }
 
+#this first plots all genes in light grey in a scatterplot x-axis WTpoly-WTtotal, and y-axis WTpoly-WTmono
+cd1_csde1_scatterplot3<- function(merged_table, title){
+  p <- ggplot(data = merged_table,               ## this alters the order in which the points are plotted, so that CSDE1 plots are on top
+              aes(x=b.x, y=b.y, alpha=0.5, label = target_id)) +
+    
+    #label select genes that are layer marker genes
+    #geom_label(data=subset(merged_table, target_id %in% c("TBR1", "SATB2", "TLE4", "POU3F3", "FEZF2", "FEZF1")))+
+    
+    
+    #geom_point(stat="identity", size = 5, colour="lightgrey", show.legend = FALSE) +
+    geom_point(stat="identity", size = 1, colour="darkgrey", show.legend = FALSE) +
+    
+    labs(x=("wald test b value WT poly vs WT total"),
+         y=("wald test b value WT poly vs WT mono"),
+         
+         title=(title)) +
+    theme_classic() # blank white background
+  #theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  #      panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  
+  plot(p)
+}
+
+#this first plots all genes in light grey in a scatterplot x-axis WTpoly-WTtotal, and y-axis WTpoly-WTmono
+cd1_csde1_scatterplot4<- function(merged_table, title){
+  p <- ggplot(data = merged_table,               ## this alters the order in which the points are plotted, so that CSDE1 plots are on top
+              aes(x=CD1_poly_vs_mono_log2FoldChange, y=CD1_poly_vs_total_log2FoldChange, alpha=0.5, label = GENE_NAME.x)) +
+    
+    #label select genes that are layer marker genes
+    #geom_label(data=subset(merged_table, target_id %in% c("TBR1", "SATB2", "TLE4", "POU3F3", "FEZF2", "FEZF1")))+
+    
+    
+    #geom_point(stat="identity", size = 5, colour="lightgrey", show.legend = FALSE) +
+    geom_point(stat="identity", size = 1, colour="darkgrey", show.legend = FALSE) +
+    
+    labs(x=("Log 2 Fold Change WT poly vs WT total"),
+         y=("Log 2 Fold Change WT poly vs WT mono"),
+         
+         title=(title)) +
+    theme_classic() # blank white background
+  #theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  #      panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  
+  plot(p)
+}
+
 #this function is for retrieving the list of genes within a specified box on the scatterplot
 #of CELF2 WTpoly-WTtotal vs WTpoly-vs-WTmono and overlay of CSDE1 vs IgG b value
 #input min.x is the minimum x value; max.x is maximum x value
